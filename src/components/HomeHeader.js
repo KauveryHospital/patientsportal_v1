@@ -2,28 +2,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import generateMenuItemStyles from './header.styles';
 import Images from '../constants/Images';
 
-export const HomeHeader = ({
+const HomeHeader = ({
   title = '',
   type = 0,
   city = '',
   onCityPress,
   onGetValue,
-  locationData, 
+  locationData,
   refRB,
   name,
 }) => {
-  // console.log(city, onCityPress, onGetValue);
- 
-  // const [locationData, setLocationData] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [selectedCity, setSelectedCity] = useState(city);
-  const [activeMenuItem, setActiveMenuItem] = useState('Home'); // Initialize with the default active menu item
-   const headerStyles = generateMenuItemStyles(activeMenuItem);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [activeMenuItem, setActiveMenuItem] = useState('Home');
+  const headerStyles = generateMenuItemStyles(activeMenuItem);
   const dropdownRef = useRef(null);
 
   const handleMenuItemClick = (menuItem) => {
     setActiveMenuItem(menuItem);
-  };  
+  };
 
   useEffect(() => {
     if (city) {
@@ -45,14 +42,19 @@ export const HomeHeader = ({
   }, []);
 
   const onDropDownSelect = (item) => {
+    console.log('Selected item:', item); 
     setSelectedCity(item);
     onGetValue(item);
     setDropdownVisible(false);
   };
 
   const toggleDropdown = () => {
+    console.log('Toggling dropdown:', !dropdownVisible); 
     setDropdownVisible(!dropdownVisible);
   };
+
+  // console.log('Dropdown visible:', dropdownVisible); // Debugging log
+  // console.log('Location data:', locationData); // Debugging log
 
   return (
     <div className="header-container" style={headerStyles.headerContainer}>
@@ -65,49 +67,20 @@ export const HomeHeader = ({
         />
       </div>
       <div className="menu-container" style={headerStyles.menuContainer}>
-      <span
-        className="menu-item"
-        style={headerStyles.menuItem}
-        onClick={() => handleMenuItemClick('Home')}
-      >
-        Home
-        {activeMenuItem === 'Home' && <div style={headerStyles.underline}></div>}
-      </span>
-      <span
-        className="menu-item"
-        style={headerStyles.menuItem}
-        onClick={() => handleMenuItemClick('Consult')}
-      >
-        Consult
-        {activeMenuItem === 'Consult' && <div style={headerStyles.underline}></div>}
-      </span>
-      <span
-        className="menu-item"
-        style={headerStyles.menuItem}
-        onClick={() => handleMenuItemClick('MHC')}
-      >
-        MHC
-        {activeMenuItem === 'MHC' && <div style={headerStyles.underline}></div>}
-      </span>
-      <span
-        className="menu-item"
-        style={headerStyles.menuItem}
-        onClick={() => handleMenuItemClick('Records')}
-      >
-        Records
-        {activeMenuItem === 'Records' && <div style={headerStyles.underline}></div>}
-      </span>
-      <span
-        className="menu-item"
-        style={headerStyles.menuItem}
-        onClick={() => handleMenuItemClick('Profile')}
-      >
-        Profile
-        {activeMenuItem === 'Profile' && <div style={headerStyles.underline}></div>}
-      </span>
-    </div>
+        {['Home', 'Consult', 'MHC', 'Records', 'Profile'].map(menuItem => (
+          <span
+            key={menuItem}
+            className="menu-item"
+            style={headerStyles.menuItem}
+            onClick={() => handleMenuItemClick(menuItem)}
+          >
+            {menuItem}
+            {activeMenuItem === menuItem && <div style={headerStyles.underline}></div>}
+          </span>
+        ))}
+      </div>
       <div className="right-content" style={headerStyles.rightContent}>
-        <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown}>
+        <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown} ref={dropdownRef}>
           <img
             src={Images.OnVerifyLocation}
             alt="Location"
@@ -119,28 +92,28 @@ export const HomeHeader = ({
           </span>
           <span className="dropdown-arrow" style={headerStyles.dropdownArrow}>▼</span>
           {dropdownVisible && (
-            <div className="dropdown-menu" style={headerStyles.dropdownMenu} ref={dropdownRef}>
+            <div className="dropdown-menu" style={headerStyles.dropdownMenu}>
               {locationData.map((item, index) => (
                 <div
                   key={index}
                   style={
-                    selectedCity === item.UnitName
+                    selectedCity === item
                       ? headerStyles.dropDownListCardActive
                       : headerStyles.dropDownListCard2
                   }
-                  onClick={() => onDropDownSelect(item.UnitName)}
+                  onClick={() => onDropDownSelect(item)}
                   className="drop-down-list-card"
                 >
                   <span
                     style={
-                      selectedCity === item.UnitName
+                      selectedCity === item
                         ? headerStyles.dropDownTitleActive
                         : headerStyles.dropDownTitle2
                     }
                     className="drop-down-title"
-                    title={item.UnitName}
+                    title={item}
                   >
-                    {item.UnitName}
+                    {item}
                   </span>
                 </div>
               ))}

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-    doctorsSearchListInConsultation,
-    specializationList,
-  } from '../utils/apiCalls';
-  import {isResponseIsValid, snackBar} from '../utils/helpers';
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+  doctorsSearchListInConsultation,
+  specializationList,
+} from '../utils/apiCalls';
+import { isResponseIsValid, snackBar } from '../utils/helpers';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import SpecialtiesCard from '../components/SpecialitiesCard';
+import Images from '../constants/Images';
+import styles from '../components/Specialities.styles';
 
-const Specialities = ({ }) => {
+const Specialities = () => {
   const [specialtiesList, setSpecialtiesList] = useState([]);
   const [loader, setLoader] = useState(false);
   const [searchLoader, setSearchLoader] = useState(false);
@@ -16,36 +19,34 @@ const Specialities = ({ }) => {
   const [searchDoctorsList, setSearchDoctorsList] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(80);
+  const [page_size, setPage_size] = useState(80);
   const [onMomentScroll, setOnMomentScroll] = useState(false);
   const [nextPage, setNextPage] = useState(null);
-  const location=useLocation();
-  const [region, setRegion] = useState('');
-//   const [unitId, setUnitId] = useState('');
 
-    const currentRegionSelected = useSelector(
-      // current region
-      state => state?.homeReducer?.currentRegion,
-    );
+  const currentRegionSelected = useSelector(
+    state => state?.homeReducer?.currentRegion,
+  );
 
+  const SpecialtiesImages = [
+    Images.generalMedicine,
+    Images.urology,
+    Images.ent,
+    Images.dermatology,
+    Images.introSliderImage2,
+    Images.introSliderImage3,
+    Images.hospitalVisit,
+    Images.introSliderImage3
+  ];
+
+  const location = useLocation();
   const query = new URLSearchParams(location.search);
-//   const currentRegionSelected = query.get('region');
+  const region = query.get('region');
   const unitId = query.get('unitId');
   const home = query.get('home');
-
-  console.log('Region:', currentRegionSelected);
-  console.log('Unit ID:', unitId);
-  console.log('Home:', home);
-//   useEffect(() => {
-//     const queryParams = new URLSearchParams(location.search);
-//     const regionParam = queryParams.get('region');
-//     const unitIdParam = queryParams.get('unitId');
-
-//     if (regionParam) setRegion(regionParam);
-//     if (unitIdParam) setUnitId(unitIdParam);
-//   }, [location]);
+  console.log('Region and Unit ID:', region, unitId);
 
   useEffect(() => {
-    specialtiesListApiCall();
+    specialtiesListApiCall(unitId, page, page_size, region);
   }, [page]);
 
   useEffect(() => {
@@ -82,12 +83,10 @@ const Specialities = ({ }) => {
       snackBar('An error occurred');
     }
   };
-  
 
   const specialtiesListApiCall = async (unitId, currentPage, pageSize, region) => {
     setLoader(true);
     try {
-      // Assume specializationList is a function making an API call
       const response = await specializationList(unitId, currentPage, pageSize, region);
       console.log('unitId and region:', unitId, region);
       console.log('Response data:', JSON.stringify(response.data.data));
@@ -136,54 +135,71 @@ const Specialities = ({ }) => {
     );
   };
 
+  const specialtiesRenderItem = (item, index) => (
+    // <div style={styles.specialtyCard}>
+      <SpecialtiesCard
+        key={index}
+        title={item.department}
+        specialtiesImage={SpecialtiesImages[0]}
+        description={item.description}
+        specialityCardPress={() => {
+          // navigate('/home-doctors-list', { state: { unit_ID: '', specializationID: item._id.$oid } });
+        }}
+      />
+    // </div>
+  );
+
   return (
-    <div>
+    <div style={styles.pageContainer}>
       {/* Modal content */}
       {isVisible && (
-        <div>
-          {/* Modal header with search bar */}
-          <div>
-            <button onClick={() => setIsVisible(false)}>Close</button>
-            <h2>Book Consultation</h2>
-            <p>Location: Your Location</p>
-            <input
-              type="text"
-              value={searchData}
-              onChange={(e) => setSearchData(e.target.value)}
-            />
-            <button onClick={doctorSearchListAPICall}>Search</button>
+        <div style={styles.modal}>
+          <div style={styles.modalContent}>
+            <div style={styles.modalHeader}>
+              <button onClick={() => setIsVisible(false)} style={styles.modalButton}>Close</button>
+              <h2>Book Consultation</h2>
+              {/* <p>Location: Your Location</p> */}
+            </div>
+            <div style={styles.modalBody}>
+              <input
+                type="text"
+                value={searchData}
+                // placeholder="Search for doctors and specialties"
+                onChange={(e) => setSearchData(e.target.value)}
+                style={styles.searchInput}
+              />
+              <button onClick={doctorSearchListAPICall} style={styles.modalButton}>Search</button>
+              <div style={styles.searchResults}>{renderSearchResults()}</div>
+            </div>
           </div>
-          {/* Modal body */}
-          <div>{renderSearchResults()}</div>
         </div>
       )}
 
       {/* Location display */}
       <div>
-        <p>Location: Your Location</p>
+        {/* <p>Location: Your Location</p> */}
       </div>
 
       {/* Search bar */}
-      <div>
+      <div style={styles.searchBar}>
         <input
           type="text"
           value={searchData}
           onChange={(e) => setSearchData(e.target.value)}
+          style={styles.searchInput}
         />
-        <button onClick={doctorSearchListAPICall}>Search</button>
+        <button onClick={doctorSearchListAPICall} style={styles.modalButton}>Search</button>
       </div>
 
       {/* Specialties list */}
-      <div>
+      <div style={styles.specialtiesContainer}>
+      <div style={styles.flatlist}>
         {loader ? (
           <p>Loading...</p>
         ) : (
-          <ul>
-            {specialtiesList.map((specialty) => (
-              <li key={specialty.id}>{specialty.name}</li>
-            ))}
-          </ul>
+          specialtiesList.map((item, index) => specialtiesRenderItem(item, index))
         )}
+      </div>
       </div>
     </div>
   );

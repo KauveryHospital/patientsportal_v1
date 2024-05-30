@@ -5,7 +5,7 @@ import COLORS from '../../constants/Theme';
 import FONTS from '../../constants/Theme';
 import Fonts from '../../constants/Theme';
 import Images from '../../constants/Images';
-import { CommonButton } from '../CommonButton';
+import CommonButton from '../CommonButton';
 import { dimen_size_height } from '../../utils/helpers';
 import { font_size } from '../../utils/helpers';
 

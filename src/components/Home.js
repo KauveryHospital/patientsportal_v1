@@ -40,6 +40,7 @@ import { AppContext } from '../navigation/AppContext';
 import Slider from 'react-slick'; // npm install react-slick slick-carousel
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import sliderimage from '../assets/images/bg1.jpg';
 
 const Home = () => {
 
@@ -386,6 +387,8 @@ const Home = () => {
     specialtiesListApiCall(unitId, 1, 4, region);
   };
 
+// console.log('jsahdfghsf', locations);
+
   const formattedDate = moment(slotDetails?.slot_date).format('DD/MM/YYYY');
   const formattedTime = moment(slotStartTime, 'HH:mm:ss').format('hh:mm A');
 
@@ -619,7 +622,11 @@ const Home = () => {
   const handleClick = (e) => {
     e.preventDefault();
     if (currentRegionSelected && unitId) {
-      history.push(`/homespecialities?region=${currentRegionSelected}&unitId=${unitId}&home=true`);
+      // history.push(`/homespecialities?region=${currentRegionSelected}&unitId=${unitId}&home=true`);
+      history.push({
+        pathname: '/homespecialities',
+        search: `?region=${currentRegionSelected}&unitId=${unitId}&home=true`
+      });
     } else {
       console.log('Missing region or unit ID');
     }
@@ -646,14 +653,14 @@ const Home = () => {
     autoplay: true,
     autoplaySpeed: 2000,
   };
-
+  // console.log('region unitid', region);
   return (
     <div style={homeStyles.pageContainer}>
       <Slider {...sliderSettings} style={homeStyles.sliderContainer}>
-        <div><img src={Images.introSliderImage2} alt="General Medicine" style={homeStyles.sliderImage} /></div>
-        <div><img src={Images.introSliderImage3} alt="Urology" style={homeStyles.sliderImage} /></div>
+        <div><img src={sliderimage} alt="General Medicine" style={homeStyles.sliderImage} /></div>
+        <div><img src={Images.introSliderImage2} alt="Urology" style={homeStyles.sliderImage} /></div>
         <div><img src={Images.introSliderImage2} alt="ENT" style={homeStyles.sliderImage} /></div>
-        <div><img src={Images.hospitalVisit} alt="Dermatology" style={homeStyles.sliderImage} /></div>
+        <div><img src={Images.introSliderImage3} alt="Dermatology" style={homeStyles.sliderImage} /></div>
       </Slider>
 
       <HomeHeader
@@ -692,7 +699,7 @@ const Home = () => {
         </div>
         <span style={homeStyles.listTitle}>Specialities</span>
         <a
-          href={`/homespecialities?region=${currentRegionSelected}&unitId=${unitId}&home=true`}
+          // href={`/homespecialities`}
           style={homeStyles.viewAllLink}
           onClick={handleClick}
         >

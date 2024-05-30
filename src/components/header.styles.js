@@ -1,5 +1,4 @@
 import { COLORS, FONTS } from "../constants/Theme";
-import { font_size } from "../utils/helpers";
 
 const generateMenuItemStyles = (activeMenuItem) => ({
   headerContainer: {
@@ -14,7 +13,6 @@ const generateMenuItemStyles = (activeMenuItem) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // Add this line to handle different browsers' box-sizing
     boxSizing: 'border-box',
   },
   logoView: {
@@ -37,9 +35,9 @@ const generateMenuItemStyles = (activeMenuItem) => ({
     fontWeight: 'bold',
     margin: '0 15px',
     cursor: 'pointer',
-    color: COLORS.primaryColor, 
-    position: 'relative', 
-    paddingBottom: activeMenuItem === 'Home' ? '3px' : '0', // Add padding only for the active menu item
+    color: COLORS.primaryColor,
+    position: 'relative',
+    paddingBottom: activeMenuItem === 'Home' ? '3px' : '0',
   },
   underline: {
     position: 'absolute',
@@ -47,7 +45,7 @@ const generateMenuItemStyles = (activeMenuItem) => ({
     left: '0',
     width: '100%',
     height: '2px',
-    backgroundColor: activeMenuItem === 'Home' ? COLORS.activeMenuItemColor : 'transparent', // Color for the underline
+    backgroundColor: COLORS.activeMenuItemColor,
   },
   locationView: {
     display: 'flex',
@@ -55,7 +53,7 @@ const generateMenuItemStyles = (activeMenuItem) => ({
     alignItems: 'center',
     cursor: 'pointer',
     marginRight: '20px',
-    position: 'relative', 
+    position: 'relative',
   },
   locationIcon: {
     width: '20px',
@@ -69,33 +67,37 @@ const generateMenuItemStyles = (activeMenuItem) => ({
   },
   dropdownArrow: {
     marginLeft: '5px',
+    fontSize: '12px',
+    color: '#333333',
   },
   dropdownMenu: {
     position: 'absolute',
     top: '100%',
-    left: 0,
-    right: 'auto', 
-    backgroundColor: COLORS.whiteColor,
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: '#ffffff',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    marginTop: '8px',
     zIndex: 1000,
-    marginTop: '5px', 
+    width: '200px',
   },
   dropDownListCardActive: {
-    backgroundColor: COLORS.primaryColor,
-    padding: '10px',
+    backgroundColor: '#f0f0f0',
+    padding: '8px 16px',
     cursor: 'pointer',
   },
   dropDownListCard2: {
-    padding: '10px',
+    backgroundColor: '#ffffff',
+    padding: '8px 16px',
     cursor: 'pointer',
   },
   dropDownTitleActive: {
-    fontFamily: FONTS.homeTitle,
-    color: COLORS.whiteColor,
+    fontWeight: 'bold',
+    color: '#333333',
   },
   dropDownTitle2: {
-    fontFamily: FONTS.homeTitle,
-    color: COLORS.textColor,
+    color: '#333333',
   },
   rightContent: {
     display: 'flex',

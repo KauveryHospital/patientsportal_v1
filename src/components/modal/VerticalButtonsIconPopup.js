@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import COLORS from '../../constants/Theme';
 import Images from '../../constants/Images';
 import FONTS from '../../constants/Theme';
-import { CommonButton } from '../../components/CommonButton';
+import CommonButton from '../../components/CommonButton';
 
 const VerticalButtonsIconPopup = ({
   isVisible,

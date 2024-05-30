@@ -12,7 +12,7 @@ import {
 
 const Signup = ({ route, navigation }) => {
   const [state, dispatch] = useReducer(NavigationReducer, InitialState);
-  const { authToken } = useContext(AppContext); // Assuming AppContext provides authToken
+  // const { authToken } = useContext(AppContext); // Assuming AppContext provides authToken
 
   const [popupLoading, setPopupLoading] = useState(false);
   const [signUpState, setSignUpState] = useState(false);
@@ -32,12 +32,12 @@ const Signup = ({ route, navigation }) => {
   const [locationSearchResult, setLocationSearchResult] = useState('');
   const [searchedData, setSearchedData] = useState([]);
 
-  useEffect(() => {
-    if (!authToken) {
-      // Redirect to login or prompt user to log in
-      navigation.push('/login'); // Adjust based on your routing setup
-    }
-  }, [authToken]);
+  // useEffect(() => {
+  //   if (!authToken) {
+  //     // Redirect to login or prompt user to log in
+  //     navigation.push('/login'); // Adjust based on your routing setup
+  //   }
+  // }, [authToken]);
 
   useEffect(() => {
     nextButtonValidation();
@@ -58,58 +58,58 @@ const Signup = ({ route, navigation }) => {
   };
 
   const handleSubmit = async event => {
-    event.preventDefault();
-    const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
-    const body = {
-      name: patientName,
-      dob: formattedDate,
-      gender: genderValue,
-      address: address,
-      pincode: pinCode,
-    };
+    // event.preventDefault();
+    // const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+    // const body = {
+    //   name: patientName,
+    //   dob: formattedDate,
+    //   gender: genderValue,
+    //   address: address,
+    //   pincode: pinCode,
+    // };
 
-    try {
-      setLoader(true);
-      const response = await signUp(body);
-      setLoader(false);
-      if (isResponseIsValid(response)) {
-        getUserInformation('User_Data').then(res => {
-          if (res === null) {
-            return;
-          } else {
-            var js = JSON.parse(res);
-            js.is_registered = 1;
-            setUserInformation('User_Data', JSON.stringify(js));
-          }
-        });
-        setTimeout(() => {
-          dispatch({ type: 'SetProfileStatus', payload: '4' });
-        }, 200);
-      } else {
-        console.log(response?.data, 'Response DATA');
-        setTimeout(() => {
-          if (response?.data) {
-            if (response?.data?.dob) {
-              setDobErrorState(true);
-              setDobErrorText(response?.data?.dob);
-            }
-            if (response?.data?.pincode) {
-              setPinCodeErrorState(true);
-              setPinCodeErrorText(response?.data?.pincode);
-            }
-            snackBar(response?.data?.error);
-          } else {
-            snackBar('API Error');
-          }
-        }, 400);
-      }
-    } catch (err) {
-      console.log(err, 'ERROR');
-      setLoader(false);
-      setTimeout(() => {
-        snackBar('API Error');
-      }, 400);
-    }
+    // try {
+    //   setLoader(true);
+    //   const response = await signUp(body);
+    //   setLoader(false);
+    //   if (isResponseIsValid(response)) {
+    //     getUserInformation('User_Data').then(res => {
+    //       if (res === null) {
+    //         return;
+    //       } else {
+    //         var js = JSON.parse(res);
+    //         js.is_registered = 1;
+    //         setUserInformation('User_Data', JSON.stringify(js));
+    //       }
+    //     });
+    //     setTimeout(() => {
+    //       dispatch({ type: 'SetProfileStatus', payload: '4' });
+    //     }, 200);
+    //   } else {
+    //     console.log(response?.data, 'Response DATA');
+    //     setTimeout(() => {
+    //       if (response?.data) {
+    //         if (response?.data?.dob) {
+    //           setDobErrorState(true);
+    //           setDobErrorText(response?.data?.dob);
+    //         }
+    //         if (response?.data?.pincode) {
+    //           setPinCodeErrorState(true);
+    //           setPinCodeErrorText(response?.data?.pincode);
+    //         }
+    //         snackBar(response?.data?.error);
+    //       } else {
+    //         snackBar('API Error');
+    //       }
+    //     }, 400);
+    //   }
+    // } catch (err) {
+    //   console.log(err, 'ERROR');
+    //   setLoader(false);
+    //   setTimeout(() => {
+    //     snackBar('API Error');
+    //   }, 400);
+    // }
   };
 
   const handleSearchChange = async event => {

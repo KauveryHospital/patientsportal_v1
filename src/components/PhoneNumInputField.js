@@ -1,5 +1,6 @@
 import React from 'react';
 import { COLORS } from '../constants/Theme';
+import { Fonts } from '../constants/Theme';
 import { auth_content } from '../constants/strings';
 import Images from '../constants/Images';
 import { dimen_size_height } from '../utils/helpers';
@@ -9,6 +10,9 @@ const styles = is_error => ({
     padding: '10px 16px',
     position: 'relative',
     height: dimen_size_height(11.7),
+    width: '70%',
+    alignItems: 'center',
+    marginLeft: '60px'
   },
   container: {
     border: is_error ? `1px solid ${COLORS.errorColor}` : `1px solid ${COLORS.borderColor}`,
@@ -38,25 +42,29 @@ const styles = is_error => ({
   },
   fieldTitle: {
     color: COLORS.textColor,
-    fontSize: '12px',
+    fontSize: '10px',
+    // fontFamily: Fonts.Regular,
   },
   prefix: {
     color: COLORS.textColor,
-    fontSize: '12px',
+    fontSize: '16px',
     marginRight: '5px',
+    // fontFamily: Fonts.Regular,
   },
   textInput: {
     flex: 1,
     textAlign: 'left',
     color: is_error ? COLORS.errorColor : COLORS.textColor,
-    fontSize: '12px',
+    fontSize: '16px',
     border: 'none',
     outline: 'none',
+    // fontFamily: Fonts.Regular,
   },
   errorText: {
     color: COLORS.errorColor,
-    fontSize: '11px',
+    fontSize: '12px',
     marginTop: '5px',
+    // fontFamily: Fonts.Regular,
   },
 });
 
