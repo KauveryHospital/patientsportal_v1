@@ -1,6 +1,5 @@
 {
-  "name": "patientsportal_v1",
-  "homepage": "https://KauveryHospital.github.io/patientsportal_v1",
+  "name": "my-app",
   "version": "0.1.0",
   "private": true,
   "main": "index.js",
@@ -16,6 +15,7 @@
     "axios": "^1.6.8",
     "device-detector-js": "^3.0.3",
     "events": "^3.3.0",
+    "gh-pages": "^6.1.1",
     "moment": "^2.30.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.2",
@@ -36,6 +36,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",

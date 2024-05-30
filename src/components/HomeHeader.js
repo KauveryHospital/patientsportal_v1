@@ -2,7 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import generateMenuItemStyles from './header.styles';
 import Images from '../constants/Images';
 
-const HomeHeader = ({ city, onCityPress, onGetValue, locationData, name }) => {
+export const HomeHeader = ({
+  title = '',
+  type = 0,
+  city = '',
+  onCityPress,
+  onGetValue,
+  locationData, 
+  refRB,
+}) => {
+  // console.log(city, onCityPress, onGetValue);
+ 
+  // const [locationData, setLocationData] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState(city);
   const [activeMenuItem, setActiveMenuItem] = useState('Home'); // Initialize with the default active menu item

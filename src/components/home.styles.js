@@ -2,7 +2,7 @@ import { COLORS, FONTS } from "../constants/Theme";
 
 const homeStyles = {
   pageContainer: {
-    marginTop: '17vh', // Adjust based on your header height
+    marginTop: '17vh',
     padding: '2vw',
   },
   sliderContainer: {
