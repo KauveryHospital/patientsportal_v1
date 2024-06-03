@@ -94,49 +94,51 @@ const Otp = () => {
 
   const verifyOTPApiCall = async () => {
     setLoader(true);
+    const otpString = otp.join(''); // Convert the array to a string
     const body = {
-      _id: otp_id,
-      otp: otp,
-      entry_id: LoginData?.entry_id,
+        _id: otp_id,
+        otp: otpString, // Use the string version of the OTP
+        entry_id: LoginData?.entry_id,
     };
     try {
-      const response = await verifyOTP(body);
-      if (isResponseIsValid(response)) {
-        setUserInformation('User_Data', JSON.stringify(response?.data));
-        setLoader(false);
-        dispatch(otpResponse(response?.data));
-        setTimeout(() => {
-          if (response.data.proceed_with === 'sign-up') {
-            dispatch(otpPopupFlag(true));
-            // SignupUser();
-            history('/signup');
-          } else {
-            // tabLoad("0");
-          }
-        }, 200);
-      } else {
-        setPusherLoader(false);
-        setLoader(false);
-        setTimeout(() => {
-          if (response?.data?.message) {
-            setIsError(true);
-            setErrorText(response?.data?.message);
-          } else {
-            snackBar(Headers.apiError);
-          }
-        }, 400);
-      }
+        const response = await verifyOTP(body);
+        if (isResponseIsValid(response)) {
+            setUserInformation('User_Data', JSON.stringify(response?.data));
+            setLoader(false);
+            dispatch(otpResponse(response?.data));
+            setTimeout(() => {
+                if (response.data.proceed_with === 'sign-up') {
+                    dispatch(otpPopupFlag(true));
+                    history.push('/signup');
+                } else {
+                    // tabLoad("0");
+                    history.push('/home');
+                }
+            }, 200);
+        } else {
+            setPusherLoader(false);
+            setLoader(false);
+            setTimeout(() => {
+                if (response?.data?.message) {
+                    setIsError(true);
+                    setErrorText(response?.data?.message);
+                } else {
+                    snackBar(Headers.apiError);
+                }
+            }, 400);
+        }
     } catch (err) {
-      setLoader(false);
-      setTimeout(() => {
-        snackBar(JSON.stringify(err));
-      }, 400);
+        setLoader(false);
+        setTimeout(() => {
+            snackBar(JSON.stringify(err));
+        }, 400);
     }
-  };
+};
+
 
   const resendOtpFunc = async () => {
     setIsError(false);
-    setOtp('');
+    setOtp(new Array(4).fill(''));
     const body = {
       _id: LoginData?._id,
     };
@@ -225,7 +227,7 @@ const Otp = () => {
           text={auth_content.VerifyOTP}
           isLoading={false}
           customStyles={styles.otpVerifyButton}
-          onClick={verifyOtp}
+          onPress={verifyOtp}
           disabled={otp.length !== 4}
         />
       </div>
