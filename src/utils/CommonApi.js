@@ -1,5 +1,5 @@
 // api.js
-import Headers from '../constants/Headers'; // Adjust the path according to your project structure
+import Headers from '../constants/Headers'; 
 import httpClient from './httpClient';
 
 export const onApiCall = async ({ method, url, data, isFileUpload = false }) => {
@@ -16,6 +16,7 @@ export const onApiCall = async ({ method, url, data, isFileUpload = false }) => 
   };
 
   console.log(`===> Request: ${method} ${url}`);
+  console.log(data);
   try {
     const response = await httpClient.request({
       url,

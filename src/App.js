@@ -1,6 +1,5 @@
-// App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Otp from './components/Otp';
 import Login from './components/login';
 import Signup from './components/Signup';
@@ -12,10 +11,10 @@ import DoctorDetail from './components/DoctorDetail';
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/">
       <div className="app">
         <Switch>
-          <Route exact path="/Login" component={Login} />
+          <Route exact path="/" component={Login} />
           <Route path="/otp" component={Otp} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />

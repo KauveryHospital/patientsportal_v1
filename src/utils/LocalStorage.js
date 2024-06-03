@@ -1,6 +1,7 @@
 const setUserInformation = async (USER_KEY, value) => {
     try {
       localStorage.setItem(USER_KEY, value);
+      console.log('infor set');
     } catch (error) {
       console.error('Error setting user information:', error);
     }
@@ -8,7 +9,8 @@ const setUserInformation = async (USER_KEY, value) => {
   
   const getUserInformation = async USER_KEY => {
     try {
-      return localStorage.getItem(USER_KEY);
+      console.log('infor get'); 
+      return localStorage.getItem(USER_KEY);      
     } catch (error) {
       console.error('Error getting user information:', error);
       return null;
