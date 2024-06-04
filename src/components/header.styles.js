@@ -1,10 +1,11 @@
 import { COLORS, FONTS } from "../constants/Theme";
+import { font_size } from "../utils/helpers";
 
 const headerStyles = {
   headerContainer: {
     width: '100%',
-    backgroundColor: '#FFFFFF', // White background
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)', // Add shadow
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
     position: 'fixed',
     top: 0,
     zIndex: 1000,
@@ -12,13 +13,15 @@ const headerStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    // Add this line to handle different browsers' box-sizing
+    boxSizing: 'border-box',
   },
   logoView: {
     display: 'flex',
     alignItems: 'center',
   },
   topLogo: {
-    width: '120px',
+    width: '140px',
     height: 'auto',
   },
   menuContainer: {
@@ -30,7 +33,8 @@ const headerStyles = {
   },
   menuItem: {
     fontFamily: FONTS.homeTitle,
-    color: COLORS.textColor,
+    color: COLORS.primaryColor,
+    fontWeight: 'bold',    
     margin: '0 15px',
     cursor: 'pointer',
   },
@@ -40,6 +44,7 @@ const headerStyles = {
     alignItems: 'center',
     cursor: 'pointer',
     marginRight: '20px',
+    position: 'relative', 
   },
   locationIcon: {
     width: '20px',
@@ -58,10 +63,11 @@ const headerStyles = {
     position: 'absolute',
     top: '100%',
     left: 0,
-    right: 0,
+    right: 'auto', 
     backgroundColor: COLORS.whiteColor,
     boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
     zIndex: 1000,
+    marginTop: '5px', 
   },
   dropDownListCardActive: {
     backgroundColor: COLORS.primaryColor,
@@ -93,6 +99,11 @@ const headerStyles = {
   heyText: {
     fontFamily: FONTS.homeTitle,
     color: COLORS.textColor,
+  },
+  nameDropDown: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
   },
   nameText: {
     fontFamily: FONTS.homeTitle,

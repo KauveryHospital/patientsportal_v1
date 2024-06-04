@@ -53,57 +53,55 @@ const HomeHeader = ({ city, onCityPress, onGetValue, locationData, name }) => {
         <span className="menu-item" style={headerStyles.menuItem}>Records</span>
         <span className="menu-item" style={headerStyles.menuItem}>Profile</span>
       </div>
-      {dropdownVisible && (
-          <div className="dropdown-menu" style={headerStyles.dropdownMenu} ref={dropdownRef}>
-            {locationData.map((item, index) => (
-              <div
-                key={index}
-                style={
-                  selectedCity === item.UnitName
-                    ? headerStyles.dropDownListCardActive
-                    : headerStyles.dropDownListCard2
-                }
-                onClick={() => onDropDownSelect(item.UnitName)}
-                className="drop-down-list-card"
-              >
-                <span
+      <div className="right-content" style={headerStyles.rightContent}>
+        <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown}>
+          <img
+            src={Images.OnVerifyLocation}
+            alt="Location"
+            className="location-icon"
+            style={headerStyles.locationIcon}
+          />
+          <span className="location-text" style={headerStyles.locationText}>
+            {selectedCity}
+          </span>
+          <span className="dropdown-arrow" style={headerStyles.dropdownArrow}>▼</span>
+          {dropdownVisible && (
+            <div className="dropdown-menu" style={headerStyles.dropdownMenu} ref={dropdownRef}>
+              {locationData.map((item, index) => (
+                <div
+                  key={index}
                   style={
                     selectedCity === item.UnitName
-                      ? headerStyles.dropDownTitleActive
-                      : headerStyles.dropDownTitle2
+                      ? headerStyles.dropDownListCardActive
+                      : headerStyles.dropDownListCard2
                   }
-                  className="drop-down-title"
-                  title={item.UnitName}
+                  onClick={() => onDropDownSelect(item.UnitName)}
+                  className="drop-down-list-card"
                 >
-                  {item.UnitName}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      <div className="greeting-container" style={headerStyles.rightContent}>
-        <div className="name-view" style={headerStyles.greeting}>
-          <span style={headerStyles.heyText}>Hey</span>
-          <div style={headerStyles.nameDropDown} onClick={onCityPress}>
+                  <span
+                    style={
+                      selectedCity === item.UnitName
+                        ? headerStyles.dropDownTitleActive
+                        : headerStyles.dropDownTitle2
+                    }
+                    className="drop-down-title"
+                    title={item.UnitName}
+                  >
+                    {item.UnitName}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="greeting-container" style={headerStyles.greeting}>
+          <div className="name-view" style={headerStyles.nameDropDown} onClick={onCityPress}>
+            <span style={headerStyles.heyText}>Hey </span>
             <span style={headerStyles.nameText}>{name}</span>
             <span style={headerStyles.dropdownArrow}>▼</span>
           </div>
           <span style={headerStyles.welcomeText}>What can we do for you today?</span>
         </div>
-        
-      </div>
-      <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown}>
-        <img
-          src={Images.OnVerifyLocation}
-          alt="Location"
-          className="location-icon"
-          style={headerStyles.locationIcon}
-        />
-        <span className="location-text" style={headerStyles.locationText}>
-          {selectedCity}
-        </span>
-        <span className="dropdown-arrow" style={headerStyles.dropdownArrow}>▼</span>
-        
         <div className="notification-view" style={headerStyles.notificationView}>
           <img
             src={Images.notificationIcon}
