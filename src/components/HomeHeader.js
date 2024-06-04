@@ -1,48 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import styles from './header.styles';
+import headerStyles from './header.styles';
 import Images from '../constants/Images';
 
-export const HomeHeader = ({
-  title = '',
-  type = 0,
-  city = '',
-  onCityPress,
-  onGetValue,
-  locationData, 
-  refRB,
-}) => {
-  // console.log(city, onCityPress, onGetValue);
- 
-  // const [locationData, setLocationData] = useState([]);
+const HomeHeader = ({ city, onCityPress, onGetValue, locationData, name }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState(city);
   const dropdownRef = useRef(null);
-  
+
   useEffect(() => {
     if (city) {
       setSelectedCity(city);
     }
   }, [city]);
-
-  // useEffect(() => {
-  //   // Fetch location data from the API
-  //   const fetchLocationData = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:1800/api/unit'); 
-  //       console.log(response.data.Result);
-  //       setLocationData(response.data.Result);
-  //       // Set default city if not already selected
-  //       // if (!selectedCity && response.data.length > 0) {
-  //       //   setSelectedCity(response.data[0]);
-  //       // }
-  //     } catch (error) {
-  //       console.error('Error fetching location data:', error);
-  //     }
-  //   };
-
-  //   fetchLocationData();
-  // }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -55,10 +24,9 @@ export const HomeHeader = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, []);
 
   const onDropDownSelect = (item) => {
-    // console.log(item);
     setSelectedCity(item);
     onGetValue(item);
     setDropdownVisible(false);
@@ -67,76 +35,83 @@ export const HomeHeader = ({
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
-  
+
   return (
-    <div className="home-container" style={styles.homeContainer}>
-      <div className="header-view-home" style={styles.container}>
-        <div className="logo-view" style={styles.logoView}>
-          <img
-            src={Images.kauveryLogo}
-            alt="Logo"
-            className="top-logo"
-            style={styles.topLogo}
-          />
-        </div>
-        <div className="location-view" style={styles.locationView} onClick={toggleDropdown}>
-          <img
-            src={Images.OnVerifyLocation}
-            alt="Location"
-            className="location-icon"
-            style={styles.locationIcon}
-          />
-          <span className="location-text" style={styles.locationText}>
-            {selectedCity}
-          </span>
-          <span className="dropdown-arrow" style={styles.dropdownArrow}>▼</span>
-          {dropdownVisible && (
-            <div className="dropdown-menu" style={styles.dropdownMenu} ref={dropdownRef}>
-              {locationData.map((item, index) => (
-                <div
-                  key={index}
+    <div className="header-container" style={headerStyles.headerContainer}>
+      <div className="logo-view" style={headerStyles.logoView}>
+        <img
+          src={Images.kauveryLogo}
+          alt="Logo"
+          className="top-logo"
+          style={headerStyles.topLogo}
+        />
+      </div>
+      <div className="menu-container" style={headerStyles.menuContainer}>
+        <span className="menu-item" style={headerStyles.menuItem}>Home</span>
+        <span className="menu-item" style={headerStyles.menuItem}>Consult</span>
+        <span className="menu-item" style={headerStyles.menuItem}>MHC</span>
+        <span className="menu-item" style={headerStyles.menuItem}>Records</span>
+        <span className="menu-item" style={headerStyles.menuItem}>Profile</span>
+      </div>
+      {dropdownVisible && (
+          <div className="dropdown-menu" style={headerStyles.dropdownMenu} ref={dropdownRef}>
+            {locationData.map((item, index) => (
+              <div
+                key={index}
+                style={
+                  selectedCity === item.UnitName
+                    ? headerStyles.dropDownListCardActive
+                    : headerStyles.dropDownListCard2
+                }
+                onClick={() => onDropDownSelect(item.UnitName)}
+                className="drop-down-list-card"
+              >
+                <span
                   style={
                     selectedCity === item.UnitName
-                      ? styles.dropDownListCardActive
-                      : styles.dropDownListCard2
+                      ? headerStyles.dropDownTitleActive
+                      : headerStyles.dropDownTitle2
                   }
-                  onClick={() => onDropDownSelect(item.UnitName)}
-                  className="drop-down-list-card"
+                  className="drop-down-title"
+                  title={item.UnitName}
                 >
-                  <span
-                    style={
-                      selectedCity === item.UnitName
-                        ? styles.dropDownTitleActive
-                        : styles.dropDownTitle2
-                    }
-                    className="drop-down-title"
-                    title={item.UnitName}
-                  >
-                    {item.UnitName}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+                  {item.UnitName}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      <div className="greeting-container" style={headerStyles.rightContent}>
+        <div className="name-view" style={headerStyles.greeting}>
+          <span style={headerStyles.heyText}>Hey</span>
+          <div style={headerStyles.nameDropDown} onClick={onCityPress}>
+            <span style={headerStyles.nameText}>{name}</span>
+            <span style={headerStyles.dropdownArrow}>▼</span>
+          </div>
+          <span style={headerStyles.welcomeText}>What can we do for you today?</span>
         </div>
-        <div className="notification-view" style={styles.notificationView}>
-          {/* Uncomment this if you have a notification icon */}
-          {/* <img
+        
+      </div>
+      <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown}>
+        <img
+          src={Images.OnVerifyLocation}
+          alt="Location"
+          className="location-icon"
+          style={headerStyles.locationIcon}
+        />
+        <span className="location-text" style={headerStyles.locationText}>
+          {selectedCity}
+        </span>
+        <span className="dropdown-arrow" style={headerStyles.dropdownArrow}>▼</span>
+        
+        <div className="notification-view" style={headerStyles.notificationView}>
+          <img
             src={Images.notificationIcon}
             alt="Notification"
             className="notification-icon"
-            style={styles.notificationIcon}
-          /> */}
+            style={headerStyles.notificationIcon}
+          />
         </div>
-      </div>
-
-      {/* Menu Items */}
-      <div className="menu-container" style={styles.menuContainer}>
-        <span className="menu-item" style={styles.menuItem}>Home</span>
-        <span className="menu-item" style={styles.menuItem}>Consult</span>
-        <span className="menu-item" style={styles.menuItem}>MHC</span>
-        <span className="menu-item" style={styles.menuItem}>Records</span>
-        <span className="menu-item" style={styles.menuItem}>Profile</span>
       </div>
     </div>
   );

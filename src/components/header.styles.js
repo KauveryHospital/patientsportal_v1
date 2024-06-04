@@ -1,102 +1,118 @@
-const styles = {
-  container: {
-    backgroundColor: '#FFFFFF',
+import { COLORS, FONTS } from "../constants/Theme";
+
+const headerStyles = {
+  headerContainer: {
+    width: '100%',
+    backgroundColor: '#FFFFFF', // White background
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)', // Add shadow
+    position: 'fixed',
+    top: 0,
+    zIndex: 1000,
+    padding: '10px 20px',
     display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    boxShadow: '0px 0.5px 0.1px rgba(0, 0, 0, 0.3)',
-    padding: '16px',
-    position: 'relative',
   },
   logoView: {
-    flex: 1,
     display: 'flex',
     alignItems: 'center',
   },
-  locationView: {
+  topLogo: {
+    width: '120px',
+    height: 'auto',
+  },
+  menuContainer: {
+    display: 'flex',
+    justifyContent: 'center',
     flex: 1,
+    marginLeft: '20px',
+    marginRight: '20px',
+  },
+  menuItem: {
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.textColor,
+    margin: '0 15px',
+    cursor: 'pointer',
+  },
+  locationView: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
     cursor: 'pointer',
-  },
-  notificationView: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  notificationIcon: {
-    height: '23px',
-    width: '18px',
+    marginRight: '20px',
   },
   locationIcon: {
-    height: '16px',
-    width: '16px',
+    width: '20px',
+    height: '20px',
+    marginRight: '8px',
   },
   locationText: {
-    fontSize: '16px',
-    fontFamily: 'Arial, sans-serif',
-    color: '#333333',
-    marginLeft: '6px',
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.textColor,
     marginRight: '5px',
   },
   dropdownArrow: {
     marginLeft: '5px',
-    fontSize: '12px',
-    color: '#333333',
   },
   dropdownMenu: {
     position: 'absolute',
     top: '100%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    backgroundColor: '#ffffff',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    marginTop: '8px',
+    left: 0,
+    right: 0,
+    backgroundColor: COLORS.whiteColor,
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
     zIndex: 1000,
-    width: '200px',
   },
   dropDownListCardActive: {
-    backgroundColor: '#f0f0f0',
-    padding: '8px 16px',
+    backgroundColor: COLORS.primaryColor,
+    padding: '10px',
     cursor: 'pointer',
   },
   dropDownListCard2: {
-    backgroundColor: '#ffffff',
-    padding: '8px 16px',
+    padding: '10px',
     cursor: 'pointer',
   },
   dropDownTitleActive: {
-    fontWeight: 'bold',
-    color: '#333333',
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.whiteColor,
   },
   dropDownTitle2: {
-    color: '#333333',
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.textColor,
   },
-  homeContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: '14px',
-  },
-  menuContainer: {
+  rightContent: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    marginTop: '16px',
   },
-  menuItem: {
-    fontSize: '16px',
-    fontFamily: 'Arial, sans-serif',
-    color: '#333333',
-    cursor: 'pointer',
-    padding: '8px 16px',
+  greeting: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    marginRight: '20px',
+  },
+  heyText: {
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.textColor,
+  },
+  nameText: {
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.primaryColor,
+    marginRight: '5px',
+  },
+  welcomeText: {
+    fontFamily: FONTS.iconText,
+    color: COLORS.textColor,
+    marginTop: '3px',
+    fontSize: '13px',
+  },
+  notificationView: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  notificationIcon: {
+    width: '24px',
+    height: '24px',
   },
 };
 
-export default styles;
+export default headerStyles;
