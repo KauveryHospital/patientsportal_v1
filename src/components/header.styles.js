@@ -1,13 +1,14 @@
 import { COLORS, FONTS } from "../constants/Theme";
 import { font_size } from "../utils/helpers";
 
-const headerStyles = {
+const generateMenuItemStyles = (activeMenuItem) => ({
   headerContainer: {
     width: '100%',
     backgroundColor: '#FFFFFF',
     boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
     position: 'fixed',
     top: 0,
+    left: 0,
     zIndex: 1000,
     padding: '10px 20px',
     display: 'flex',
@@ -33,10 +34,20 @@ const headerStyles = {
   },
   menuItem: {
     fontFamily: FONTS.homeTitle,
-    color: COLORS.primaryColor,
-    fontWeight: 'bold',    
+    fontWeight: 'bold',
     margin: '0 15px',
     cursor: 'pointer',
+    color: COLORS.primaryColor, 
+    position: 'relative', 
+    paddingBottom: activeMenuItem === 'Home' ? '3px' : '0', // Add padding only for the active menu item
+  },
+  underline: {
+    position: 'absolute',
+    bottom: '0',
+    left: '0',
+    width: '100%',
+    height: '2px',
+    backgroundColor: activeMenuItem === 'Home' ? COLORS.activeMenuItemColor : 'transparent', // Color for the underline
   },
   locationView: {
     display: 'flex',
@@ -124,6 +135,6 @@ const headerStyles = {
     width: '24px',
     height: '24px',
   },
-};
+});
 
-export default headerStyles;
+export default generateMenuItemStyles;

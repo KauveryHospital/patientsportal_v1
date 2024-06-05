@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import headerStyles from './header.styles';
+import generateMenuItemStyles from './header.styles';
 import Images from '../constants/Images';
 
 const HomeHeader = ({ city, onCityPress, onGetValue, locationData, name }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState(city);
+  const [activeMenuItem, setActiveMenuItem] = useState('Home'); // Initialize with the default active menu item
+   const headerStyles = generateMenuItemStyles(activeMenuItem);
   const dropdownRef = useRef(null);
+
+  const handleMenuItemClick = (menuItem) => {
+    setActiveMenuItem(menuItem);
+  };  
 
   useEffect(() => {
     if (city) {
@@ -47,12 +53,47 @@ const HomeHeader = ({ city, onCityPress, onGetValue, locationData, name }) => {
         />
       </div>
       <div className="menu-container" style={headerStyles.menuContainer}>
-        <span className="menu-item" style={headerStyles.menuItem}>Home</span>
-        <span className="menu-item" style={headerStyles.menuItem}>Consult</span>
-        <span className="menu-item" style={headerStyles.menuItem}>MHC</span>
-        <span className="menu-item" style={headerStyles.menuItem}>Records</span>
-        <span className="menu-item" style={headerStyles.menuItem}>Profile</span>
-      </div>
+      <span
+        className="menu-item"
+        style={headerStyles.menuItem}
+        onClick={() => handleMenuItemClick('Home')}
+      >
+        Home
+        {activeMenuItem === 'Home' && <div style={headerStyles.underline}></div>}
+      </span>
+      <span
+        className="menu-item"
+        style={headerStyles.menuItem}
+        onClick={() => handleMenuItemClick('Consult')}
+      >
+        Consult
+        {activeMenuItem === 'Consult' && <div style={headerStyles.underline}></div>}
+      </span>
+      <span
+        className="menu-item"
+        style={headerStyles.menuItem}
+        onClick={() => handleMenuItemClick('MHC')}
+      >
+        MHC
+        {activeMenuItem === 'MHC' && <div style={headerStyles.underline}></div>}
+      </span>
+      <span
+        className="menu-item"
+        style={headerStyles.menuItem}
+        onClick={() => handleMenuItemClick('Records')}
+      >
+        Records
+        {activeMenuItem === 'Records' && <div style={headerStyles.underline}></div>}
+      </span>
+      <span
+        className="menu-item"
+        style={headerStyles.menuItem}
+        onClick={() => handleMenuItemClick('Profile')}
+      >
+        Profile
+        {activeMenuItem === 'Profile' && <div style={headerStyles.underline}></div>}
+      </span>
+    </div>
       <div className="right-content" style={headerStyles.rightContent}>
         <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown}>
           <img

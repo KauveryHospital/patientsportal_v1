@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Consult from './components/Consult';
 import DoctorsList from './components/DoctorsList';
 import DoctorDetail from './components/DoctorDetail';
+import Specialities from './components/Specialities';
 // import NotFound from './components/NotFound';
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/consult" component={Consult} />
           <Route path="/dlist" component={DoctorsList} />
           <Route path="/ddetail" component={DoctorDetail} />
+          <Route path="/homespecialities" component={Specialities} />
           {/* <Route component={NotFound} /> */}
         </Switch>
       </div>

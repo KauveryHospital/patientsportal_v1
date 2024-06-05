@@ -14,7 +14,7 @@ export const BookingCard = ({ title = '', bookingImage, description = '', onPres
         <div style={{ flex: 0.8 }}>
           <span style={styles.bookingTitle}>{title}</span>
         </div>
-        <div style={styles.bookingVectorView}>→</div>
+        {/* <div style={styles.bookingVectorView}>→</div> */}
       </div>
       <p style={styles.bookingDescription}>{description}</p>
     </div>

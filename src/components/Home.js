@@ -8,9 +8,11 @@ import BookingCard from '../components/BookingCard';
 import CommonLoader from '../components/CommonLoader';
 import Images from '../constants/Images';
 import { isResponseIsValid, snackBar } from '../utils/helpers';
-import styles from './home.styles';
+import homeStyles from './home.styles';
 import { getUserInformation } from '../utils/LocalStorage';
 import moment from 'moment';
+import VerifyNewAccountCreation from '../components/modal/VerifyNewAccountCreation';
+import VerticalButtonsIconPopup from '../components/modal/VerticalButtonsIconPopup';
 // Action imports
 import {
   currentRegion,
@@ -35,9 +37,14 @@ import {
   updateBooking,
 } from '../utils/apiCalls';
 import { AppContext } from '../navigation/AppContext';
+import Slider from 'react-slick'; // npm install react-slick slick-carousel
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
 
+  const SpecialtiesImages = [Images.generalMedicine, Images.urology, Images.ent, Images.dermatology, Images.introSliderImage2, Images.introSliderImage3, Images.hospitalVisit, Images.introSliderImage3];
+  
   const currentRegionSelected = useSelector(
     // current region
     state => state?.homeReducer?.currentRegion,
@@ -57,6 +64,25 @@ const Home = () => {
   const [specialityCount, setSpecialityCount] = useState(0);
   const dispatch = useDispatch();
   const bottomSheetRef = useRef();
+  // const [specialityCount, setSpecialityCount] = useState(specialtiesList.length);
+  const [bookingConfirmedPopup, setBookingConfirmedPopup] = useState(false);
+  const [cancelBookingPopup, setCancelBookingPopup] = useState(false);
+  const [isRescheduled, setIsRescheduled] = useState(false);
+  const [pendingConfirmedPopup, setPendingConfirmedPopup] = useState(false);
+  const [payAtHosPendingConfirmedPopup, setPayAtHosPendingConfirmedPopup] = useState(false);
+  const [webHookErrorPopup, setWebHookErrorPopup] = useState(false);
+  const [occupiedConfirmedPopup, setOccupiedConfirmedPopup] = useState(false);
+  const [failedConfirmedPopup, setFailedConfirmedPopup] = useState(false);
+  // const [reasonList, setReasonList] = useState([]);
+  const [eventItem, setEventItem] = useState({});
+  // const [eventData, setEventData] = useState([]);
+  // const [loaderState, setLoader] = useState(false);
+  const [feedBack, setFeedBack] = useState('');
+  const [reason, setReason] = useState('');
+  const [feedBackPopup, setFeedBackPopup] = useState(false);
+  const [rescheduleErrorPopup, setRescheduleErrorPopup] = useState(false);
+  const [joinNowErrorPopup, setJoinNowErrorPopup] = useState(false);
+  const [rescheduleDatalist, setRescheduleDatalist] = useState([]);
   // const { Auth } = useContext(AppContext);
   const ref = React.useRef(null);
   const history = useHistory();
@@ -449,8 +475,187 @@ const Home = () => {
     bottomSheetRef.current.open();
   };
 
+  const onAddFeedbackApiCall = async () => {
+    setLoader(true);
+    const body = {
+      message: reason == 'Others (please specify)' ? feedBack : reason,
+      patient_profile: eventItem.patient_id,
+      booking_id: eventItem.booking_id,
+    };
+    try {
+      const response = await addFeedback(body);
+      if (isResponseIsValid(response)) {
+        setLoader(false);
+        setFeedBack('');
+        setReason('');
+        setFeedBackPopup(false);
+      } else {
+        setLoader(false);
+        setFeedBackPopup(false);
+        setReason('');
+        setFeedBack('');
+        if (response?.data?.message) {
+          snackBar(JSON.stringify(response?.data?.message));
+        } else {
+          snackBar('An error occurred. Please try again.');
+        }
+      }
+    } catch (err) {
+      setLoader(false);
+      setFeedBackPopup(false);
+      snackBar(JSON.stringify(err));
+    }
+  };
+
+  const onUpdateBookingApiCall = async () => {
+    setLoader(true);
+    const body = {
+      _id: eventItem.booking_id,
+      booking_status: 'completed',
+    };
+    try {
+      const response = await updateBooking(body);
+      if (isResponseIsValid(response)) {
+        setLoader(false);
+      } else {
+        setLoader(false);
+        if (response?.data?.message) {
+          snackBar(JSON.stringify(response?.data?.message));
+        } else {
+          snackBar('An error occurred. Please try again.');
+        }
+      }
+    } catch (err) {
+      setLoader(false);
+      snackBar(JSON.stringify(err));
+    }
+  };
+
+  // const getFeedbackListApiCall = async () => {
+  //   try {
+  //     const response = await getFeedbackList();
+  //     if (isResponseIsValid(response)) {
+  //       setReasonList(response.data?.data);
+  //     } else {
+  //       if (response?.data) {
+  //         snackBar(response?.data);
+  //       } else {
+  //         snackBar('An error occurred. Please try again.');
+  //       }
+  //     }
+  //   } catch (err) {
+  //     snackBar('An error occurred. Please try again.');
+  //   }
+  // };
+
+  const RescheduleonApiCall = async (item) => {
+    setLoader(true);
+    const response = await reScheduleBooking(item.booking_id);
+    if (isResponseIsValid(response)) {
+      setLoader(false);
+      const rp = response.data.data;
+      setRescheduleDatalist(rp);
+      // navigate('/reschedule-slot-details', {
+      //   state: { item: rp, doctor_id: rp._id.$oid, dataItem: item, pay_at_hospital: rp.pay_at_hospital },
+      // });
+    } else {
+      setLoader(false);
+    }
+  };
+
+  const rescheduleUpcomingEventsApiCall = async (item) => {
+    setLoader(true);
+    try {
+      const response = await upcomingEvents();
+      if (isResponseIsValid(response)) {
+        setEventData(response.data.data);
+        response.data.data.forEach((e) => {
+          if (e.booking_id === item.booking_id) {
+            if (e.is_reschedule) {
+              RescheduleonApiCall(item);
+            } else {
+              setLoader(false);
+              setRescheduleErrorPopup(true);
+            }
+          }
+        });
+      } else {
+        setLoader(false);
+        snackBar(JSON.stringify(response.data));
+      }
+    } catch (err) {
+      setLoader(false);
+      snackBar(JSON.stringify(err));
+    }
+  };
+
+  const joinNowCheckFunc = async (item) => {
+    setLoader(true);
+    try {
+      const response = await upcomingEvents();
+      if (isResponseIsValid(response)) {
+        setEventData(response.data.data);
+        response.data.data.forEach((e) => {
+          if (e.booking_id === item.booking_id) {
+            if (e.caller_id !== null) {
+              setLoader(false);
+              // navigate('/video-call-screen', { state: { data: item } });
+            } else {
+              setLoader(false);
+              setJoinNowErrorPopup(true);
+            }
+          }
+        });
+      } else {
+        setLoader(false);
+        snackBar(JSON.stringify(response.data));
+      }
+    } catch (err) {
+      setLoader(false);
+      snackBar(JSON.stringify(err));
+    }
+  };
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (currentRegionSelected && unitId) {
+      history.push(`/homespecialities?region=${currentRegionSelected}&unitId=${unitId}&home=true`);
+    } else {
+      console.log('Missing region or unit ID');
+    }
+  };
+
+  const specialtiesRenderItem = (item, index) => (
+    <SpecialtiesCard
+      key={index}
+      title={item.department}
+      specialtiesImage={SpecialtiesImages[index % SpecialtiesImages.length]}
+      description={item.description}
+      specialityCardPress={() => {
+        // navigate('/home-doctors-list', { state: { unit_ID: '', specializationID: item._id.$oid } });
+      }}
+    />
+  );
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
+
   return (
-    <div style={styles.pageContainer}>
+    <div style={homeStyles.pageContainer}>
+      <Slider {...sliderSettings} style={homeStyles.sliderContainer}>
+        <div><img src={Images.introSliderImage2} alt="General Medicine" style={homeStyles.sliderImage} /></div>
+        <div><img src={Images.introSliderImage3} alt="Urology" style={homeStyles.sliderImage} /></div>
+        <div><img src={Images.introSliderImage2} alt="ENT" style={homeStyles.sliderImage} /></div>
+        <div><img src={Images.hospitalVisit} alt="Dermatology" style={homeStyles.sliderImage} /></div>
+      </Slider>
+
       <HomeHeader
         city={currentRegionSelected}
         onCityPress={() => ref.current.open()}
@@ -459,22 +664,11 @@ const Home = () => {
         onGetValue={handleCitySelect}
         name={name}
       />
-      <div style={styles.contentContainer}>
+      <div style={homeStyles.contentContainer}>
         <CommonLoader loading={loader} />
-        {/* <div style={styles.topView}>
-          <div style={styles.nameView}>
-            <span style={styles.heyText}>Hey </span>
-            <div style={styles.nameDropDown}>
-              <span style={styles.nameText}>{name}</span>
-            </div>
-          </div>
-          <span style={styles.welcomeText}>
-            {'What can we do for you today?'}
-          </span>
-        </div> */}
-        <div style={styles.flatlistParentView}>
-          <span style={styles.listTitle}>Bookings</span>
-          <div style={styles.flatlist}>
+        <div style={homeStyles.flatlistParentView}>
+          <span style={homeStyles.listTitle}>Bookings</span>
+          <div style={homeStyles.flatlist}>
             <BookingCard
               title={'Doctors appointments'}
               bookingImage={Images.appointment}
@@ -496,22 +690,70 @@ const Home = () => {
             />
           </div>
         </div>
-        <span style={styles.listTitle}>Specialities</span>
-        <div style={styles.flatlist}>
-          {specialtiesList.map((item, index) => (
-            <div key={index}>
-              <SpecialtiesCard
-                title={item.department}
-                specialtiesImage={item.specialtiesImage}
-                description={item.description}
-                specialityCardPress={() => {
-                  // Handle specialty card press
-                }}
-              />
-            </div>
-          ))}
+        <span style={homeStyles.listTitle}>Specialities</span>
+        <a
+          href={`/homespecialities?region=${currentRegionSelected}&unitId=${unitId}&home=true`}
+          style={homeStyles.viewAllLink}
+          onClick={handleClick}
+        >
+          View All
+        </a>
+        <div style={homeStyles.flatlist}>
+          {specialtiesList.map((item, index) => specialtiesRenderItem(item, index))}
         </div>
       </div>
+
+      <div style={homeStyles.videoContainer}>
+        {/* <h2>Testimonials</h2> */}
+        <span style={homeStyles.listTitle1}>Patient Testimonials</span>
+        <video width="100%" controls>
+          <source src="your-testimonial-video-url.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <VerifyNewAccountCreation
+        isModalVisible={bookingConfirmedPopup}
+        title="Booked!"
+        content={`Your ${slotDetails?.slot_type === 'Offline' ? 'in-person' : 'video'} consultation with ${doctorDetails?.first_name} on ${formattedDate}, ${formattedTime} is Confirmed!`}
+        buttonPress={() => setBookingConfirmedPopup(false)}
+        closeModal={() => setBookingConfirmedPopup(false)}
+        buttonText="Okay"
+        showNotes={true}
+        showTicketID={false}
+        notes="The Appointment time is subject to last-minute change due to any unavoidable emergencies to be attended by the doctors."
+        type="success"
+      />
+
+      <VerifyNewAccountCreation
+        isModalVisible={cancelBookingPopup}
+        title="Cancelled!"
+        content={`Your appointment with Dr. ${doctorDetails?.first_name} has been cancelled.`}
+        buttonPress={() => setCancelBookingPopup(false)}
+        closeModal={() => setCancelBookingPopup(false)}
+        buttonText="Okay"
+        type="danger"
+      />
+
+      <VerticalButtonsIconPopup
+        isModalVisible={rescheduleErrorPopup}
+        title="Error"
+        content="This appointment cannot be rescheduled."
+        buttonPress={() => setRescheduleErrorPopup(false)}
+        closeModal={() => setRescheduleErrorPopup(false)}
+        buttonText="Close"
+      />
+
+      <VerticalButtonsIconPopup
+        isModalVisible={joinNowErrorPopup}
+        title="Error"
+        content="The consultation cannot be joined now."
+        buttonPress={() => setJoinNowErrorPopup(false)}
+        closeModal={() => setJoinNowErrorPopup(false)}
+        buttonText="Close"
+      />
+
+      {/* Add other modals and popups as needed */}
     </div>
   );
 };
