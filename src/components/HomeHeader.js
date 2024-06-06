@@ -10,6 +10,7 @@ export const HomeHeader = ({
   onGetValue,
   locationData, 
   refRB,
+  name,
 }) => {
   // console.log(city, onCityPress, onGetValue);
  
