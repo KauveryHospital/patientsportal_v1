@@ -1,8 +1,9 @@
 {
-  "name": "KauveryHospital",
-  "homepage": "https://pushpaanand.github.io/patientsportalv1",
+  "name": "patientsportal_v1",
+  "homepage": "https://KauveryHospital.github.io/patientsportal_v1",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
@@ -38,6 +39,8 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
