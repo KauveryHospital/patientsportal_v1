@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/patientsportal_v1/static/css/main.94ef521c.css",
-    "main.js": "/patientsportal_v1/static/js/main.f7a8bd60.js",
+    "main.js": "/patientsportal_v1/static/js/main.043b8847.js",
     "static/media/logo.gif": "/patientsportal_v1/static/media/logo.23fa34647e89b9791c27.gif",
     "static/media/bg1.jpg": "/patientsportal_v1/static/media/bg1.e459e6864366bce16bbf.jpg",
     "static/media/KauveryNewLogo.png": "/patientsportal_v1/static/media/KauveryNewLogo.5a2e093e96c4393d82e5.png",
@@ -19,10 +19,10 @@
     "static/media/slick.ttf": "/patientsportal_v1/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/patientsportal_v1/static/media/slick.295183786cd8a1389865.woff",
     "main.94ef521c.css.map": "/patientsportal_v1/static/css/main.94ef521c.css.map",
-    "main.f7a8bd60.js.map": "/patientsportal_v1/static/js/main.f7a8bd60.js.map"
+    "main.043b8847.js.map": "/patientsportal_v1/static/js/main.043b8847.js.map"
   },
   "entrypoints": [
     "static/css/main.94ef521c.css",
-    "static/js/main.f7a8bd60.js"
+    "static/js/main.043b8847.js"
   ]
 }
