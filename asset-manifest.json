@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/patientsportal_v1/static/css/main.f029a054.css",
-    "main.js": "/patientsportal_v1/static/js/main.0a66b9bb.js",
+    "main.css": "/patientsportal_v1/static/css/main.94ef521c.css",
+    "main.js": "/patientsportal_v1/static/js/main.f7a8bd60.js",
     "static/media/logo.gif": "/patientsportal_v1/static/media/logo.23fa34647e89b9791c27.gif",
+    "static/media/bg1.jpg": "/patientsportal_v1/static/media/bg1.e459e6864366bce16bbf.jpg",
     "static/media/KauveryNewLogo.png": "/patientsportal_v1/static/media/KauveryNewLogo.5a2e093e96c4393d82e5.png",
     "static/media/IntroSliderLogo.png": "/patientsportal_v1/static/media/IntroSliderLogo.aa28fc1c8a14dfb00d81.png",
     "static/media/Logo_original.png": "/patientsportal_v1/static/media/Logo_original.337798a15f1f78bc77c3.png",
@@ -13,11 +14,15 @@
     "static/media/HQLogo.png": "/patientsportal_v1/static/media/HQLogo.f5613629aae388994aae.png",
     "static/media/Logo_Hq@1x.png": "/patientsportal_v1/static/media/Logo_Hq@1x.15f183e4a44c50b670be.png",
     "index.html": "/patientsportal_v1/index.html",
-    "main.f029a054.css.map": "/patientsportal_v1/static/css/main.f029a054.css.map",
-    "main.0a66b9bb.js.map": "/patientsportal_v1/static/js/main.0a66b9bb.js.map"
+    "static/media/slick.svg": "/patientsportal_v1/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/patientsportal_v1/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/patientsportal_v1/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/patientsportal_v1/static/media/slick.295183786cd8a1389865.woff",
+    "main.94ef521c.css.map": "/patientsportal_v1/static/css/main.94ef521c.css.map",
+    "main.f7a8bd60.js.map": "/patientsportal_v1/static/js/main.f7a8bd60.js.map"
   },
   "entrypoints": [
-    "static/css/main.f029a054.css",
-    "static/js/main.0a66b9bb.js"
+    "static/css/main.94ef521c.css",
+    "static/js/main.f7a8bd60.js"
   ]
 }
