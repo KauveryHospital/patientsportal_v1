@@ -96,20 +96,20 @@ const Consult = ({ navigation }) => {
 
   const currentRegionSelected1 = 'Trichy - Cantonment';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:1800/api/specialities?city=${currentRegionSelected1}`);
-        console.log(response.data);
-        setSpecialtiesData(response.data);
-      } catch (error) {
-        console.error(error);
-        // Handle error
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`http://localhost:1800/api/specialities?city=${currentRegionSelected1}`);
+  //       console.log(response.data);
+  //       setSpecialtiesData(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       // Handle error
+  //     }
+  //   };
 
-    fetchData();
-  }, [currentRegionSelected1]);
+  //   fetchData();
+  // }, [currentRegionSelected1]);
 
   const scrollToBeginning = () => {
     if (flatListRef.current) {
@@ -235,13 +235,13 @@ const Consult = ({ navigation }) => {
                   </div>
                 ) : (
                   <div>
-                    {SpecialtiesData.length > 0 ? (
-                      SpecialtiesData.map((item, index) => (
+                    {specialities.length > 0 ? (
+                      specialities.map((item, index) => (
                         <SpecialtiesCard
                           key={index}
-                          title={item.specialityName}
+                          title={item.department}
                           specialtiesImage={SpecialtiesImages[index % SpecialtiesImages.length]}
-                          description={item.specialityDescription}
+                          description={item.description}
                           specialityCardPress={() => {
                             // Handle specialty card press
                             history.push('/dlist');
