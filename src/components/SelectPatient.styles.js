@@ -1,85 +1,74 @@
 const styles = {
-    container: {
-      padding: '20px',
-    },
-    doctorDetailCard: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginBottom: '20px',
-    },
-    doctorImage: {
-      width: '150px',
-      height: '150px',
-      borderRadius: '50%',
-    },
-    doctorDetails: {
-      textAlign: 'center',
-    },
-    mapContainer: {
-      marginBottom: '20px',
-    },
-    bookingInfo: {
-      textAlign: 'center',
-      marginBottom: '20px',
-    },
-    button: {
-      padding: '10px 20px',
-      backgroundColor: '#007BFF',
-      color: '#FFF',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-    },
-    modalStyles: {
-      content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        width: '400px',
-        padding: '20px',
-        borderRadius: '10px',
-      },
-    },
-    modalHeader: {
-      textAlign: 'center',
-      marginBottom: '20px',
-    },
-    formGroup: {
-      marginBottom: '15px',
-    },
-    selectBox: {
-      width: '100%',
-      padding: '10px',
-      borderRadius: '5px',
-      border: '1px solid #CCC',
-    },
-    note: {
-      fontSize: '14px',
-      color: '#888',
-      marginBottom: '10px',
-    },
-    textArea: {
-      width: '100%',
-      height: '100px',
-      padding: '10px',
-      borderRadius: '5px',
-      border: '1px solid #CCC',
-    },
-    modalButton: {
-      width: '100%',
-      padding: '10px',
-      backgroundColor: '#007BFF',
-      color: '#FFF',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      marginTop: '10px',
-    },
-  };
-  
-  export default styles;
-  
+  selectPatientContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+    height: '100vh', // Ensures the container takes the full height of the viewport
+  },
+  fieldParentContainer: {
+    marginBottom: '20px',
+    textAlign: 'center',
+    width: '50%',
+  },
+  fieldTitlePatient: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: '10px',
+  },
+  fieldContainer: {
+    width: '100%',
+    maxWidth: '250px', // Maximum width for larger screens
+    marginBottom: '20px',
+  },
+  noteText: {
+    fontSize: '14px',
+    color: '#888',
+    marginBottom: '20px',
+    textAlign: 'center',
+    width: '100%',
+    maxWidth: '250px', // Maximum width for larger screens
+  },
+  note1: {
+    fontWeight: 'bold',
+  },
+  note2: {
+    display: 'inline',
+  },
+  note3: {
+    color: '#007BFF',
+    cursor: 'pointer',
+  },
+  fieldContainerNotes: {
+    width: '100%',
+    maxWidth: '250px', // Maximum width for larger screens
+    marginBottom: '20px',
+  },
+  buttonView: {
+    width: '100%',
+    maxWidth: '0px', // Maximum width for larger screens
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: '20px',
+  },
+  toPayCardView: {
+    marginBottom: '20px',
+    textAlign: 'center',
+    width: '100%',
+  },
+  nextButton: {
+    width: '100%',
+    padding: '10px 20px',
+    backgroundColor: '#007BFF',
+    color: '#FFF',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginBottom: '10px',
+  },
+};
+
+export default styles;

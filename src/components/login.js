@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Modal from 'react-modal'; // Importing Modal
 import CommonButton from '../components/CommonButton';
 import { PhoneNumInputField } from '../components/PhoneNumInputField';
 import { auth_content } from '../constants/strings';
-import styles from './Login.styles';
 import Images from '../constants/Images';
-import { useHistory } from 'react-router-dom';
-import { allowNumOnly, isResponseIsValid, snackBar } from '../utils/helpers';
 import { verifyNumber } from '../utils/apiCalls';
 import DeviceDetector from 'device-detector-js';
-import { useDispatch } from 'react-redux';
 import { loginResponse } from '../store/actions/authActions';
+import TermsAndConditionsModal from './TermsConditionsModal';
+import PrivacyPolicy from './PrivacyPolicy';
+import styles from './Login.styles';
+import { isResponseIsValid, snackBar } from '../utils/helpers';
 
 const Login = ({ navigation }) => {
   const [number, setNumber] = useState('');
@@ -18,14 +21,17 @@ const Login = ({ navigation }) => {
   const [checked, setChecked] = useState(false);
   const [checkBoxDisable, setCheckBoxDisable] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const onChangeNum = (num) => {
     setIsError(false);
-    setNumber(num.replace(/\D/g, ''));
-    if (num.length !== 10) {
+    const cleanedNum = num.replace(/\D/g, '');
+    setNumber(cleanedNum);
+    if (cleanedNum.length !== 10 || !/^[6789]\d{9}$/.test(cleanedNum)) {
       setIsError(true);
       setErrorText('Enter a valid mobile number');
     } else {
@@ -53,20 +59,17 @@ const Login = ({ navigation }) => {
         getDeviceId: navigator.userAgent,
         getDeviceName: device.device.brand,
         getModel: device.device.model,
-        getUniqueId: navigator.userAgent, // Using userAgent as a placeholder
+        getUniqueId: navigator.userAgent,
       },
     };
-
-    console.log('Body', body);
 
     try {
       const response = await verifyNumber(body);
 
       if (isResponseIsValid(response)) {
-        console.log(response.data, 'response');
         dispatch(loginResponse(response?.data));
         setLoader(false);
-        history.push('/otp'); // Navigating to OTPVerify page
+        history.replace('/otp');
         setTimeout(() => {
           setCheckBoxDisable(false);
         }, 500);
@@ -91,10 +94,6 @@ const Login = ({ navigation }) => {
         snackBar(Headers.apiError);
       }, 400);
     }
-  };
-
-  const navigateTo = (path) => {
-    history.push(path);
   };
 
   return (
@@ -133,7 +132,7 @@ const Login = ({ navigation }) => {
               <span
                 style={styles.checkBoxText2}
                 className="linkText"
-                onClick={() => navigation.navigate('TermsAndConditionLogin')}
+                onClick={() => setIsModalOpen(true)}
               >
                 {'Terms and conditions'}
               </span>
@@ -141,7 +140,7 @@ const Login = ({ navigation }) => {
               <span
                 style={styles.checkBoxText2}
                 className="linkText"
-                onClick={() => navigation.navigate('PrivacyPolicyLogin')}
+                onClick={() => setIsModalOpen1(true)}
               >
                 {'Privacy Policy'}
               </span>
@@ -161,6 +160,14 @@ const Login = ({ navigation }) => {
           </div>
         </div>
       </div>
+      <TermsAndConditionsModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+      />
+      <PrivacyPolicy
+        isOpen={isModalOpen1}
+        onRequestClose={() => setIsModalOpen1(false)}
+      />
     </div>
   );
 };

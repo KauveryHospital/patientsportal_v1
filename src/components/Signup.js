@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import moment from 'moment';
 import { googlePinCode, signUp, GooglePlaceIds } from '../utils/apiCalls'; // Import your utility functions
-import { styles } from './signup.styles';
+import { styles, COLORS } from './signup.styles';
 import { getUserInformation, setUserInformation } from '../utils/LocalStorage';
 import { isResponseIsValid, snackBar } from '../utils/helpers';
 import {
@@ -29,28 +29,24 @@ const Signup = ({ route, navigation }) => {
   const [locationSearchResult, setLocationSearchResult] = useState('');
   const [searchedData, setSearchedData] = useState([]);
 
-  // useEffect(() => {
-  //   if (!authToken) {
-  //     // Redirect to login or prompt user to log in
-  //     navigation.push('/login'); // Adjust based on your routing setup
-  //   }
-  // }, [authToken]);
-
   useEffect(() => {
     nextButtonValidation();
   }, [patientName, selectedDate, genderValue, pinCode, address]);
 
   const nextButtonValidation = () => {
     if (
-      patientName === '' ||
-      selectedDate === '' ||
-      genderValue === '' ||
-      pinCode.length !== 6 ||
-      address === ''
+      patientName !== '' &&
+      selectedDate !== '' &&
+      genderValue !== '' &&
+      pinCode.length === 6 &&
+      address !== '' &&
+      !nameErrorState &&
+      !dobErrorState &&
+      !pinCodeErrorState
     ) {
-      setSignUpState(false);
-    } else {
       setSignUpState(true);
+    } else {
+      setSignUpState(false);
     }
   };
 
@@ -133,6 +129,51 @@ const Signup = ({ route, navigation }) => {
     }
   };
 
+  const validateName = (name) => {
+    const nameRegex = /^[A-Za-z]{3,}$/;
+    if (!nameRegex.test(name)) {
+      setNameErrorState(true);
+      setNameErrorText('Name should contain only letters and at least 3 characters');
+    } else {
+      setNameErrorState(false);
+      setNameErrorText('');
+    }
+    setPatientName(name);
+    nextButtonValidation();
+  };
+
+  const validateDOB = (date) => {
+    const selected = moment(date);
+    const today = moment();
+    const earliestDate = moment('1800-01-01');
+
+    if (selected.isAfter(today)) {
+      setDobErrorState(true);
+      setDobErrorText('Date of birth cannot be in the future');
+    } else if (selected.isBefore(earliestDate)) {
+      setDobErrorState(true);
+      setDobErrorText('Date of birth cannot be before 1800');
+    } else {
+      setDobErrorState(false);
+      setDobErrorText('');
+    }
+    setSelectedDate(date);
+    nextButtonValidation();
+  };
+
+  const validatePinCode = (pincode) => {
+    const pinCodeRegex = /^\d{6}$/;
+    if (!pinCodeRegex.test(pincode)) {
+      setPinCodeErrorState(true);
+      setPinCodeErrorText('Pincode should be exactly 6 numeric characters');
+    } else {
+      setPinCodeErrorState(false);
+      setPinCodeErrorText('');
+    }
+    setPinCode(pincode);
+    nextButtonValidation();
+  };
+
   return (
     <div style={styles.signupContainer}>
       <div style={styles.backgroundBlur}></div>
@@ -147,21 +188,23 @@ const Signup = ({ route, navigation }) => {
           <input
             type="text"
             value={patientName}
-            onChange={(e) => setPatientName(e.target.value)}
+            onChange={(e) => validateName(e.target.value)}
             placeholder="Enter patient name"
             required
             style={styles.input}
           />
+          {nameErrorState && <p style={styles.errorText}>{nameErrorText}</p>}
         </div>
         <div style={styles.formGroup}>
           <label style={styles.label}>Date of Birth</label>
           <input
             type="date"
             value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
+            onChange={(e) => validateDOB(e.target.value)}
             required
             style={styles.input}
           />
+          {dobErrorState && <p style={styles.errorText}>{dobErrorText}</p>}
         </div>
         <div style={styles.formGroup}>
           <label style={styles.label}>Gender</label>
@@ -206,20 +249,22 @@ const Signup = ({ route, navigation }) => {
           <input
             type="text"
             value={pinCode}
-            onChange={(e) => setPinCode(e.target.value)}
+            onChange={(e) => validatePinCode(e.target.value)}
             placeholder="Enter your pincode"
             maxLength={6}
             required
             style={styles.input}
           />
+          {pinCodeErrorState && <p style={styles.errorText}>{pinCodeErrorText}</p>}
         </div>
-        <button
-          type="submit"
-          disabled={!signUpState}
-          style={styles.button(signUpState)}
-        >
-          Next
-        </button>
+        {signUpState && (
+          <button
+            type="submit"
+            style={styles.button(signUpState)}
+          >
+            Next
+          </button>
+        )}
       </form>
     </div>
   );

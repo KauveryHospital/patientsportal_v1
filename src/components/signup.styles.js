@@ -121,8 +121,9 @@ export const styles = {
     backgroundColor: enabled ? COLORS.primaryColor : COLORS.disabledColor,
     border: 'none',
     borderRadius: '4px',
-    cursor: enabled ? 'pointer' : 'not-allowed',
-    transition: 'background-color 0.3s',
+    cursor: 'pointer',
+    transition: 'background-color 0.8s',
+    opacity: enabled ? 1 : 1, 
   }),
   errorInput: {
     border: `1px solid ${COLORS.errorColor}`,

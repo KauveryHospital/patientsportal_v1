@@ -37,7 +37,7 @@ import {
   updateBooking,
 } from '../utils/apiCalls';
 import { AppContext } from '../navigation/AppContext';
-import Slider from 'react-slick'; // npm install react-slick slick-carousel
+import Slider from 'react-slick'; 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import sliderimage from '../assets/images/bg1.jpg';
@@ -692,7 +692,10 @@ const Home = () => {
               bookingImage={Images.healthCheckup}
               description={'Book online to avail offers.'}
               onPressCard={() => {
-                // navigation.navigate('MHCStackScreen');
+                history.push({
+                  pathname: '/mhc',
+                  state: { specialities: specialtiesList }
+                });
               }}
             />
           </div>

@@ -1,55 +1,73 @@
 const styles = {
-    container: {
-      width: '100%',
-      maxWidth: 800,
-      margin: '0 auto',
-      padding: 20,
-    },
-    searchContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      marginBottom: 20,
-    },
-    input: {
-      padding: 8,
-      marginRight: 10,
-      width: 200,
-      border: '1px solid #ccc',
-    },
-    button: {
-      padding: '8px 16px',
-      backgroundColor: '#007bff',
-      color: '#fff',
-      border: 'none',
-      cursor: 'pointer',
-    },
-    buttonHover: {
-      backgroundColor: '#0056b3',
-    },
-    doctorsList: {
-      textAlign: 'center',
-    },
-    cardsContainer: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-    },
-    doctorCard: {
-      width: 200,
-      margin: 10,
-      padding: 10,
-      border: '1px solid #ccc',
-      borderRadius: 5,
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    },
-    doctorImage: {
-      width: '100%',
-      borderRadius: 5,
-    },
-    doctorDetails: {
-      margin: '10px 0',
-    },
-  };
-  
-  export default styles;
-  
+  doctorCardContainer: {
+    margin: '10px 0px',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: '5px',
+    padding: '10px',
+    border: '1px solid #ddd',
+  },
+  doctorCardContainerFullScreen: {
+    marginBottom: '10px',
+    marginLeft: '10px',
+    marginRight: '10px',
+    marginTop: '10px',
+    borderWidth: '1px',
+    borderColor: '#e7e7e7',
+    borderRadius: '5px',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    padding: '10px',
+    display: 'flex',
+  },
+  imgView: {
+    borderRadius: '30px',
+    width: '60px',
+    height: '60px',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileIcon: {
+    height: '100%',
+    width: '100%',
+    borderRadius: '30px',
+  },
+  doctorHome: {
+    height: '14px',
+    width: '14px',
+  },
+  consultAlarm: {
+    height: '14px',
+    width: '14px',
+  },
+  consultLanguage: {
+    height: '14px',
+    width: '14px',
+  },
+  name: {
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#000000',
+  },
+  doctorDesignation: {
+    fontSize: '12px',
+    color: '#777777',
+    marginTop: '2px',
+  },
+  hospitalVisit: {
+    fontSize: '10px',
+    color: '#777777',
+    marginLeft: '4px',
+  },
+  slotRange: {
+    fontSize: '12px',
+    color: '#555555',
+    marginLeft: '4px',
+  },
+};
+
+export default styles;

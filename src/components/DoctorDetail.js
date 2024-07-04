@@ -1,64 +1,81 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import styles from './Ddetail.styles';
-import RequestForm from './SelectPatient';
+import React from 'react';
+import styles from './Ddetail.styles'; // Adjust the path according to your project structure
+import COLORS from '../constants/Theme';
+import Images from '../constants/Images';
+import Vector from '../constants/Vector';
 
-const DoctorDetail = () => {
-  const location = useLocation();
-//   const doctor = location.state?.doctor;
-const [isModalOpen, setIsModalOpen] = useState(false);
-
-const handleRequestNowClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleFormSubmit = (formData) => {
-    console.log('Form submitted:', formData);
-    // Handle form submission logic here (e.g., API call)
-    setIsModalOpen(false);
-  };
-
-const doctor=[{description: null, designation: ['MBBS', 'MD', 'DM'], doctorId: "35613000004836", doctorName: "Dr. Vijay  Shekar P", expertin: null, languages: null,rbooking: "False",specialtyName: "Cardiology"}];
-
- console.log('ksejgbfudh',doctor);
-
+const DoctorProfile = ({ UserImage, item, slot_range, userLevel = "2", request = false, reSchedule = false }) => {
+  console.log('image', UserImage);
+  console.log('list', item);
   return (
-    <div style={styles.container}>
-      <div style={styles.doctorDetailCard}>
+    <div style={{ ...styles.container1, backgroundColor: request ? "#FFF7E4" : COLORS.secondaryColor }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         <img
-          src={`https://via.placeholder.com/150?text=${doctor.doctorName}`}
-          alt={doctor.doctorName}
-          style={styles.doctorImage}
+          src={
+            UserImage == null || UserImage === ''
+              ? Images.profileEmptyImage
+              : UserImage
+          }
+          alt="Profile"
+          style={{ ...styles.profileImageBefore, backgroundColor: '#E6E9EE' }}
         />
-        <div style={styles.doctorDetails}>
-          <h3>{doctor.doctorName}</h3>
-          <p>Designation: {doctor.designation}</p>
-          <p>Specialty: {doctor.specialtyName}</p>
+        <div style={{ width: '12px', height: '12px' }} />
+        <div>
+          <p
+            style={{
+              ...styles.name,
+              marginRight: '50px',
+              paddingRight: '50px',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {item?.first_name === undefined ? '-' : `${item?.first_name}`}
+          </p>
+          <div style={{ height: '7px' }} />
+          <div style={styles.description}>
+            <p style={{ ...styles.gender, marginRight: '100px' }} numberoflines={2}>
+              {item.default_specialization}
+            </p>
+          </div>
+          <div style={{ height: '20px' }} />
+          <div>
+            {slot_range !== null && (
+              <div>
+                {reSchedule ? (
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {Vector.Clock}
+                    <div style={{ width: '4px' }} />
+                    <p style={styles.timeText}>{slot_range}</p>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {Vector.Clock}
+                    <div style={{ width: '4px' }} />
+                    <p style={styles.timeText}>{slot_range}</p>
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{ height: '7px' }} />
+            {item?.languages && (
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <img
+                  src={Images.language}
+                  alt="Language"
+                  style={styles.alarmIcon}
+                />
+                <div style={{ width: '4px' }} />
+                <p style={styles.timeText}>{item?.languages?.join(", ")}</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <div style={styles.mapContainer}>
-        <h4>Hospital Location:</h4>
-        <a href={`https://www.google.com/maps?q=${doctor.hospitalLocation}`} target="_blank" rel="noopener noreferrer">
-          View on Google Maps
-        </a>
-      </div>
-      <div style={styles.bookingInfo}>
-        <p>For booking, a ticket will be created. Please click on the "Request Now" button to proceed.</p>
-        <button onClick={handleRequestNowClick} style={styles.button}>
-          Request Now
-        </button>
-        <RequestForm
-        isOpen={isModalOpen}
-        onRequestClose={handleModalClose}
-        onSubmit={handleFormSubmit}
-      />
       </div>
     </div>
   );
 };
 
-export default DoctorDetail;
+export default DoctorProfile;

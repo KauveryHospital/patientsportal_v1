@@ -1,16 +1,8 @@
 import { COLORS, FONTS } from '../constants/Theme';
-import BackgroundImage from '../assets/images/bg1.jpg'; // Adjust the path as necessary
+import BackgroundImage from '../assets/images/bg1.jpg'; 
 
 const styles = {
   OTPContainer: {
-    // position: 'relative',
-    // display: 'flex',
-    // flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // minHeight: '100vh',
-    // overflow: 'hidden',
-    // backgroundColor: '#FFFFFFCC',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -44,18 +36,6 @@ const styles = {
     height: 'auto',
   },
   mainContent: {
-    // position: 'relative',
-    //   zIndex: 1,
-    //   width: '100%',
-    //   maxWidth: '500px',
-    //   padding: '20px',
-    //   backgroundColor: 'rgba(255, 255, 255, 0.6)', // Adjust alpha (last value) for transparency
-    //   borderRadius: '8px',
-    //   boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-    //   margin: '20px',
-    //   display: 'flex',
-    //   flexDirection: 'column',
-    //   alignItems: 'center',
     position: 'relative',
     zIndex: 1,
     width: '100%',
@@ -76,7 +56,6 @@ const styles = {
     ...FONTS.titleLarge,
     fontSize: '22px',
     color: COLORS.textColor,
-    // marginBottom: '20px',
     textAlign: 'center',
   },
   OtpContainerView: {
@@ -95,52 +74,53 @@ const styles = {
     backgroundColor: COLORS.whiteColor,
   },
   errorText: {
-    ...FONTS.bodyMedium,
+    //  ...FONTS.bodyMedium,
     color: COLORS.errorColor,
-    textAlign: 'center',
-    marginTop: '10px',
+    fontSize: '14px',
+    textAlign: 'left',
+    marginTop: '8px',
   },
   timerContainer: {
     marginBottom: '20px',
     textAlign: 'center',
   },
   timerText: {
-    // ...FONTS.bodyMedium,
     color: COLORS.textColor,
     textAlign: 'center',
   },
+  editnum: {
+    color: COLORS.primaryColor,
+    textAlign: 'center',  
+    marginLeft: '160px',
+    fontSize: '14px'
+  },
+  attemptsText: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 10,
+  },
   timerText2: {
-    // ...FONTS.bodyMedium,
     color: COLORS.primaryColor,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   resendButton: {
-    // width: '200px',
-    // height: '50px',
-    // fontSize: '18px',
-    // backgroundColor: COLORS.primaryColor,
-    // color: COLORS.whiteColor,
-    // borderRadius: '5px',
-    // cursor: 'pointer',
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // border: 'none',
+    width: '100px',
+    height: '40px',
     borderRadius: '28px', 
     backgroundColor: COLORS.primaryColor,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '20px', 
-    paddingVertical: '10px', 
+    paddingVertical: '120px', 
     borderWidth: '1px',
-    borderColor: COLORS.primaryColor, 
-    cursor: 'pointer', 
-    outline: 'none', 
+    // borderColor: '',  
+    // borderWidth: '1px',
+    // borderColor: COLORS.primaryColor, 
+    cursor: 'pointer',  
     color: COLORS.whiteColor,
-    // fontFamily: FONTS.buttonTitle.fontFamily, 
     fontSize: FONTS.buttonTitle.fontSize, 
-  },
+  },  
   spinner: {
     marginRight: '10px', 
     color: '#ffffff', 
@@ -162,6 +142,17 @@ const styles = {
     justifyContent: 'center',
     border: 'none',
   },
+  successMessage: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: COLORS.successColor,
+    color: COLORS.whiteColor,
+    padding: '10px',
+    textAlign: 'center',
+    zIndex: 9999,
+  },
   // Media queries
   '@media (max-width: 768px)': {
     mainContent: {
@@ -176,7 +167,7 @@ const styles = {
       margin: '0 3px',
     },
     resendButton: {
-      width: '150px',
+      width: '160px',
       height: '40px',
       fontSize: '16px',
     },

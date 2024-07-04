@@ -1,31 +1,39 @@
+import { COLORS } from "../constants/Theme";
+
 const styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#FAFAFA', // Or any color you want
-      padding: '10px',
-      borderRadius: '5px', // Adjust as needed
-      cursor: 'pointer',
-    },
-    textInputContainer: {
-      flex: 1,
-    },
-    title: {
-      fontSize: '16px',
-      color: '#000', // Or any color you want
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-    searchIconView: {
-      paddingLeft: '10px',
-    },
-    searchIcon: {
-      width: '20px', // Adjust size as needed
-      height: '20px', // Adjust size as needed
-    },
-  };
-  
-  export default styles;
-  
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: '5px', 
+    border: '1px solid #ddd', 
+    padding: '10px', 
+    marginBottom: '10px', 
+    marginHorizontal: '10px', 
+  },
+  textInputContainer: {
+    flex: 1,    
+  },
+  searchIconView: {
+    height: '30px', 
+    width: '30px', 
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer', // Added cursor pointer
+  },
+  searchIcon: {
+    height: '24px',
+    width: '24px',
+  },
+  input: {
+    fontSize: '16px',
+    color: COLORS.placeholderColor,
+    width: '100%', 
+    border: 'none',
+    outline: 'none',
+  },
+};
+
+export default styles;

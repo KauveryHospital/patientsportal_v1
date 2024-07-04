@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom'; // Import Link from React Router
 import { COLORS } from '../constants/Theme';
 import Headers from '../constants/Headers';
-import styles from './Otp.styles'; // Assuming styles.js exists for styling
+import styles from './Otp.styles'; 
 import CommonButton from '../components/CommonButton';
 import CommonLoader from '../components/CommonLoader';
 import { auth_content } from '../constants/strings';
@@ -17,15 +17,18 @@ const Otp = () => {
   const LoginData = useSelector(state => state?.authReducer?.loginData);
   const dispatch = useDispatch();
   const history = useHistory();
+  const otpInputs = useRef([]);
 
   const [otp, setOtp] = useState(new Array(4).fill(''));
   const [otp_id, setOtp_id] = useState(LoginData?._id);
-  const [resendTimer, setResendTimer] = useState(120); // 120 seconds = 2 minutes
+  const [resendTimer, setResendTimer] = useState(90); // Initial timer set to 90 seconds
   const [resendText, setResendText] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [loader, setLoader] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [attempts, setAttempts] = useState(0); // State to track OTP resend attempts
 
   useEffect(() => {
     startTimer();
@@ -37,9 +40,14 @@ const Otp = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Auto-focus on the first OTP input box when component mounts
+    otpInputs.current[0].focus();
+  }, []);
+
   const startTimer = useCallback(() => {
     setIsActive(true);
-    setResendTimer(120); // Reset the timer to 120 seconds (2 minutes)
+    setResendTimer(getResendTimerDuration()); 
     const timer = setInterval(() => {
       setResendTimer(prevTimer => {
         if (prevTimer <= 1) {
@@ -50,18 +58,19 @@ const Otp = () => {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [attempts]);
 
   const stopTimer = useCallback(() => {
     setIsActive(false);
   }, []);
 
   const handleResendOTP = useCallback(() => {
-    if (!isActive) {
+    if (!isActive && attempts < 3) { 
       resendOtpFunc();
       startTimer();
+      setAttempts(prevAttempts => prevAttempts + 1); 
     }
-  }, [isActive, startTimer]);
+  }, [isActive, startTimer, attempts]);
 
   const codeChangeFunc = (e, index) => {
     const value = allowNumOnly(e.target.value);
@@ -71,9 +80,20 @@ const Otp = () => {
     setIsError(false);
     // Auto focus on the next input box
     if (index < otp.length - 1 && value.length === 1) {
-      const nextInput = document.getElementById(`otpInput_${index + 1}`);
+      const nextInput = otpInputs.current[index + 1];
       if (nextInput) {
         nextInput.focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Backspace' && otp[index] === '') {
+      if (index > 0) {
+        const prevInput = otpInputs.current[index - 1];
+        if (prevInput) {
+          prevInput.focus();
+        }
       }
     }
   };
@@ -84,10 +104,10 @@ const Otp = () => {
 
   const verifyOTPApiCall = async () => {
     setLoader(true);
-    const otpString = otp.join(''); // Convert the array to a string
+    const otpString = otp.join(''); 
     const body = {
       _id: otp_id,
-      otp: otpString, // Use the string version of the OTP
+      otp: otpString, 
       entry_id: LoginData?.entry_id,
     };
     try {
@@ -96,14 +116,15 @@ const Otp = () => {
         setUserInformation('User_Data', JSON.stringify(response?.data));
         setLoader(false);
         dispatch(otpResponse(response?.data));
+        setSuccessMessage('OTP verified successfully!');
         setTimeout(() => {
           if (response.data.proceed_with === 'sign-up') {
             dispatch(otpPopupFlag(true));
             // history.push('/signup');
           } else {
-            history.push('/home');
+            history.replace('/home');
           }
-        }, 200);
+        }, 2000);
       } else {
         setLoader(false);
         setTimeout(() => {
@@ -136,8 +157,18 @@ const Otp = () => {
       if (active === 1) {
         setResendText(response.data.static.content);
       } else {
-        setResendTimer(120);
+        setResendTimer(getResendTimerDuration()); // Reset timer based on attempts
       }
+    }
+  };
+
+  const getResendTimerDuration = () => {
+    if (attempts === 0) {
+      return 90;
+    } else if (attempts === 1) {
+      return 60;
+    } else {
+      return 30;
     }
   };
 
@@ -149,15 +180,17 @@ const Otp = () => {
 
   return (
     <div style={styles.OTPContainer}>
+      {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
       <div style={styles.backgroundBlur}></div>
       <div style={styles.mainContent}>
-      <div style={styles.logoContainer}>
+        <div style={styles.logoContainer}>
           <img src={Images.Logo_Hq} alt="Logo" style={styles.logo} />
         </div>
         <div style={styles.titleView}>
           <h2 style={styles.title}>
             Please enter the OTP that has been sent to {LoginData?.mn}.
           </h2>
+          <Link style={styles.editnum} to="/">Edit Mobile Number</Link> {/* Back button to Login page */}
         </div>
         <div style={styles.OtpContainerView}>
           {otp.map((data, index) => (
@@ -167,14 +200,16 @@ const Otp = () => {
               maxLength="1"
               value={data}
               onChange={e => codeChangeFunc(e, index)}
+              onKeyDown={e => handleKeyDown(e, index)} // Handle backspace key
               onFocus={e => e.target.select()}
               id={`otpInput_${index}`}
               autoComplete="one-time-code"
               style={styles.otpInput}
+              ref={ref => (otpInputs.current[index] = ref)} // Set refs for OTP inputs
             />
           ))}
-          {isError && <p style={styles.errorText}>Note: {errorText}</p>}
         </div>
+        {isError && <p style={styles.errorText}>Note: {errorText}</p>}
         {resendText ? (
           <div style={styles.timerContainer}>
             <p style={styles.resendText}>{resendText}</p>
@@ -202,13 +237,19 @@ const Otp = () => {
             isLoading={false}
             customStyles={styles.otpVerifyButton}
             onPress={verifyOtp}
-            disabled={otp.length !== 4}
+            disabled={otp.some(value => value === '')}
           />
         </div>
         <CommonLoader loading={loader} />
-      </div>
-    </div>
-  );
-};
-
-export default Otp;
+        {attempts > 0 && attempts < 3 && (
+                    <p style={styles.attemptsText}>
+                    You have {3 - attempts} {3 - attempts === 1 ? 'attempt' : 'attempts'} remaining.
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        };
+        
+        export default Otp;
+        

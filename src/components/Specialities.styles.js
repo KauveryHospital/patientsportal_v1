@@ -1,23 +1,17 @@
 import { COLORS, FONTS } from "../constants/Theme";
 
 const homeStyles = {
+  // ...other styles
   pageContainer: {
+    marginTop: '17vh',
     padding: '2vw',
-    '@media (min-width: 768px)': {
-      marginTop: '17vh',
-    },
   },
   sliderContainer: {
-    width: '90%',
-    margin: '0 auto',
-    marginBottom: '4vh',
+    // Slider container styles
   },
   sliderImage: {
     width: '100%',
     height: 'auto',
-    maxHeight: '400px',
-    borderRadius: '10px',
-    objectFit: 'cover',
   },
   contentContainer: {
     padding: '2vw',
@@ -69,62 +63,95 @@ const homeStyles = {
   listTitle: {
     fontFamily: FONTS.headerTitle,
     fontSize: '2vw',
-    color: COLORS.primaryColor,
+    color: COLORS.textColor,
     marginHorizontal: '7vw',
     marginBottom: '3vh',
-    marginLeft: '40vw',
-    fontWeight: 'bold',
-    textAlign: 'center',    
-  },
-  listTitle1: {
-    fontFamily: FONTS.headerTitle,
-    fontSize: '2vw',
-    color: COLORS.primaryColor,
-    marginHorizontal: '7vw',
-    marginBottom: '3vh',    
-    fontWeight: 'bold',
-    textAlign: 'center',    
+    fontWeight: 'bold',    
+    marginLeft: '40vw'
   },
   flatlist: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '2vw',
+    justifyContent: 'space-between',
+    gap: '1.5vw',
     marginTop: '1vh',
-    marginLeft: '10vh',
     backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   viewAllLink: {
     fontFamily: FONTS.iconText,
     fontSize: '1.4vw',
     color: COLORS.primaryColor,
-    // textDecoration: 'underline',
-    textAlign: 'center',
+    marginLeft: '30vw',
     cursor: 'pointer',
     fontWeight: 'bold',
-    display: 'block',
-    margin: '2vh auto',
   },
   videoContainer: {
-    marginTop: '4vh',
+    marginTop: '20px',
     textAlign: 'center',
-    padding: '2vw',
-    backgroundColor: COLORS.whiteColor,
-    borderRadius: '10px',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-    maxWidth: '700px',
-    margin: '0 auto',
-    fontFamily: FONTS.headerTitle,
-    fontSize: '2vw',
-    fontWeight: 'bold',
-    color: COLORS.textColor,
   },
-  video: {
+  modal: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
     width: '100%',
-    height: 'auto',
-    borderRadius: '10px',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: '2vw',
+    borderRadius: '5px',
+    width: '50vw',
+    maxHeight: '70vh',
+    overflowY: 'auto',
+  },
+  modalHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '1vw',
+  },
+  modalBody: {
+    marginTop: '1vw',
+  },
+  modalButton: {
+    padding: '0.5vw 1vw',
+    backgroundColor: COLORS.primaryColor,
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  searchBar: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '2vw',
+  },
+  searchInput: {
+    width: '50%',
+    padding: '0.5vw',
+    marginRight: '1vw',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+  },
+  searchResults: {
+    marginTop: '2vw',
+  },
+  searchResultItem: {
+    padding: '1vw',
+    borderBottom: '1px solid #ccc',
+  },
+//   specialtiesContainer: {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//     justifyContent: 'space-around',
+//     marginTop: '2vh',
+//   },
 };
 
 export default homeStyles;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom'; // Import useHistory hook for navigation
 import generateMenuItemStyles from './header.styles';
 import Images from '../constants/Images';
 
@@ -17,9 +18,30 @@ const HomeHeader = ({
   const [activeMenuItem, setActiveMenuItem] = useState('Home');
   const headerStyles = generateMenuItemStyles(activeMenuItem);
   const dropdownRef = useRef(null);
+  const history = useHistory(); // Get the history object from useHistory hook
 
   const handleMenuItemClick = (menuItem) => {
     setActiveMenuItem(menuItem);
+    // Navigate to another page based on the menu item clicked
+    switch (menuItem) {
+      case 'Home':
+        history.push('/home');
+        break;
+      case 'Consult':
+        history.push('/consult');
+        break;
+      case 'MHC':
+        history.push('/mhc');
+        break;
+      case 'Records':
+        history.push('/records');
+        break;
+      case 'Profile':
+        history.push('/profile');
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
@@ -53,9 +75,6 @@ const HomeHeader = ({
     setDropdownVisible(!dropdownVisible);
   };
 
-  // console.log('Dropdown visible:', dropdownVisible); // Debugging log
-  // console.log('Location data:', locationData); // Debugging log
-
   return (
     <div className="header-container" style={headerStyles.headerContainer}>
       <div className="logo-view" style={headerStyles.logoView}>
@@ -72,7 +91,7 @@ const HomeHeader = ({
             key={menuItem}
             className="menu-item"
             style={headerStyles.menuItem}
-            onClick={() => handleMenuItemClick(menuItem)}
+            onClick={() => handleMenuItemClick(menuItem)} // Handle click to navigate
           >
             {menuItem}
             {activeMenuItem === menuItem && <div style={headerStyles.underline}></div>}
@@ -80,62 +99,7 @@ const HomeHeader = ({
         ))}
       </div>
       <div className="right-content" style={headerStyles.rightContent}>
-        <div className="location-view" style={headerStyles.locationView} onClick={toggleDropdown} ref={dropdownRef}>
-          <img
-            src={Images.OnVerifyLocation}
-            alt="Location"
-            className="location-icon"
-            style={headerStyles.locationIcon}
-          />
-          <span className="location-text" style={headerStyles.locationText}>
-            {selectedCity}
-          </span>
-          <span className="dropdown-arrow" style={headerStyles.dropdownArrow}>▼</span>
-          {dropdownVisible && (
-            <div className="dropdown-menu" style={headerStyles.dropdownMenu}>
-              {locationData.map((item, index) => (
-                <div
-                  key={index}
-                  style={
-                    selectedCity === item
-                      ? headerStyles.dropDownListCardActive
-                      : headerStyles.dropDownListCard2
-                  }
-                  onClick={() => onDropDownSelect(item)}
-                  className="drop-down-list-card"
-                >
-                  <span
-                    style={
-                      selectedCity === item
-                        ? headerStyles.dropDownTitleActive
-                        : headerStyles.dropDownTitle2
-                    }
-                    className="drop-down-title"
-                    title={item}
-                  >
-                    {item}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="greeting-container" style={headerStyles.greeting}>
-          <div className="name-view" style={headerStyles.nameDropDown} onClick={onCityPress}>
-            <span style={headerStyles.heyText}>Hey </span>
-            <span style={headerStyles.nameText}>{name}</span>
-            <span style={headerStyles.dropdownArrow}>▼</span>
-          </div>
-          <span style={headerStyles.welcomeText}>What can we do for you today?</span>
-        </div>
-        <div className="notification-view" style={headerStyles.notificationView}>
-          <img
-            src={Images.notificationIcon}
-            alt="Notification"
-            className="notification-icon"
-            style={headerStyles.notificationIcon}
-          />
-        </div>
+        {/* Rest of the header content */}
       </div>
     </div>
   );
