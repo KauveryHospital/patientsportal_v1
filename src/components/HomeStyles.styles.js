@@ -1,5 +1,3 @@
-import { height } from "@fortawesome/free-solid-svg-icons/fa0";
-import { textFieldClasses } from "@mui/material";
 import Images from './constants/Images.js';
 
 const styles = {
@@ -17,6 +15,9 @@ const styles = {
         alignItems: 'center',
         padding: '0px',
         justifyContent: 'space-between',
+        '@media (max-width: 600px)': {
+            height: '60px',
+        },
     },
     toolbar: {
         display: 'flex',
@@ -27,6 +28,10 @@ const styles = {
     logo: {
         height: '70px',
         marginLeft: '20px',
+        '@media (max-width: 600px)': {
+            height: '50px',
+            marginLeft: '10px',
+        },
     },
     locationSection: {
         display: 'flex',
@@ -37,8 +42,12 @@ const styles = {
         letterSpacing: "0px",
         width: '24px',
         height: '35px',
+        '@media (max-width: 600px)': {
+            fontSize: '14px',
+            width: '20px',
+            height: '30px',
+        },
     },
-    
     instructions: {
         flex: 1,
         display: 'flex',
@@ -48,7 +57,7 @@ const styles = {
     },
     ins1: {
         fontFamily: 'Poppins',
-        paddingTop:'10px',
+        paddingTop: '10px',
         fontSize: '50px',
         lineHeight: '40px',
         letterSpacing: '0px',
@@ -83,51 +92,22 @@ const styles = {
             lineHeight: '20px',
         },
     },
-
     searchBar: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',  
         width: '100%',
-        backgroundImage:'{Images.family_front}',
+        backgroundImage: `url(${Images.family_front})`,
     },
-    nav:{
-        position:'relative',
-        left:'68%',
-    },
-        navul: {
-        listStyle: 'none',
-        marginTop:'5px',
-        fontSize:'100px',
-        padding: 0,
-        display: 'flex',
-        justifyContent: 'flex-left',
-      },
-      
-      navli: {
-        marginLeft: '20px',
-        fontWeight: 'bold',
-        fontSize: '1px',
-        fontFamily:  'sans-serif',
-      },
-      
-    nava:{
-        color: '#fff',
-        textDecoration:' none',
-        fontSize: '18px',
-      },
-      
-      
-    serachtext:{
-        position:'relative',
-        bottom:'60%',
-        left:'40%',
-        letterSpacing:' 0px',
+    serachtext: {
+        position: 'relative',
+        bottom: '60%',
+        left: '40%',
+        letterSpacing: '0px',
         color: '#58595B',
         opacity: 1,
-        width:'50%',
+        width: '50%',
     },
-
     locationDropdown: {
         flex: 1,
         backgroundColor: '#FFFFFF',
@@ -135,69 +115,73 @@ const styles = {
         margin: '0 10px',
     },
     searchButton: {
-
         width: '300px',
         margin: '0 20px',
         height: '50px',
         background: '#FFFFFF 0% 0% no-repeat padding-box',
         boxShadow: '0px 3px 6px #00000029',
         border: '1px solid #E9AFB7',
-        fontFamily:'Poppins',
+        fontFamily: 'Poppins',
         borderRadius: '35px',
-        color:'#58595B',
-        fontsize:'26px',
-        fontweight:'regular',
-        opacity: 1
+        color: '#58595B',
+        fontSize: '26px',
+        fontWeight: 'regular',
+        opacity: 1,
+        '@media (max-width: 600px)': {
+            width: '100%',
+            fontSize: '18px',
+            height: '40px',
+        },
     },
     searchmain: {
-        background:' #962067 0% 0% no-repeat padding-box',
-        color:'white',
+        background: '#962067 0% 0% no-repeat padding-box',
+        color: 'white',
         width: '70px',
         height: '28px',
         boxShadow: '0px 3px 6px #00000029',
-        fontStyle:'Poppins',
-        fontFamily:'Poppins',
-        borderRadius:' 26px',
-        position:'absolute',
-        left:'30%',
+        fontStyle: 'Poppins',
+        fontFamily: 'Poppins',
+        borderRadius: '26px',
+        position: 'absolute',
+        left: '30%',
         opacity: 1,
-
     },
-    
     search: {
-        position:'relative',
-        width:'100%',
+        position: 'relative',
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
-    // add other styles as needed
-  },
-  searchContainer: {
-    position: 'relative', // Make the container relative for positioning the icon
-    width: '100%', // Ensure the container spans the full width
-  },
-  searchfield: {
-    width: '70%',
-    padding: '10px',
-    borderColor:'#962067',
-    position:'relative',
-    right:'50%',
-background: '#FFFFFF 0% 0% no-repeat padding-box',
-border: '1px solid #962067',
-borderRadius: '35px',
-opacity: 1,
-  },
-  searchIcon: {
-    height: '1.5rem',
-    width: '1.5rem',
-    padding: '4px',
-    position: 'absolute',
-    alignItems:'right',
-    boxSizing: 'border-box',
-    top: '50%',
-    left: '2px',
-    transform: 'translateY(-50%)',
-  },
-
+    },
+    searchContainer: {
+        position: 'relative',
+        width: '100%',
+    },
+    searchfield: {
+        width: '70%',
+        padding: '10px',
+        borderColor: '#962067',
+        position: 'relative',
+        right: '50%',
+        background: '#FFFFFF 0% 0% no-repeat padding-box',
+        border: '1px solid #962067',
+        borderRadius: '35px',
+        opacity: 1,
+        '@media (max-width: 600px)': {
+            width: '100%',
+            padding: '5px',
+        },
+    },
+    searchIcon: {
+        height: '1.5rem',
+        width: '1.5rem',
+        padding: '4px',
+        position: 'absolute',
+        alignItems: 'right',
+        boxSizing: 'border-box',
+        top: '50%',
+        left: '2px',
+        transform: 'translateY(-50%)',
+    },
     secondSplit: {
         display: 'flex',
         width: '100%',
@@ -205,29 +189,29 @@ opacity: 1,
         justifyContent: 'space-between',
         flexWrap: 'wrap',
     },
-    buttext:{
+    buttext: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
         textAlign: 'center',
         width: '100%',
         height: '55px',
         borderRadius: '35px',
         opacity: 1,
         font: 'normal normal normal 17px Poppins',
-        letterSpacing: '0px'    ,
+        letterSpacing: '0px',
     },
-    qrtext:{
+    qrtext: {
         display: 'flex',
         alignItems: 'left',
         position: 'relative',
-        right:'15%',
+        right: '15%',
         width: '60%',
         height: '55px',
         borderRadius: '35px',
         opacity: 1,
         font: 'normal normal normal 17px Poppins',
-        letterSpacing: '0px'    ,
+        letterSpacing: '0px',
     },
     imageSection: {
         flex: 1,
@@ -236,12 +220,11 @@ opacity: 1,
         alignItems: 'center',
         margin: '0 0',
     },
-
-    qrimage:{
+    qrimage: {
         width: '5%',
         borderWidth: '10px',
         marginLeft: '10%',
-        display: 'block',            // Change to block if you want it to behave like a block-level element
+        display: 'block',
         alignSelf: 'flex-start',
     },
     thirdSplit: {
@@ -249,15 +232,20 @@ opacity: 1,
         width: '95%',
         backgroundColor: '#FFFFFF',
         borderRadius: '10px',
-        alignItems:'center',
+        alignItems: 'center',
         marginTop: '2%',
-        marginLeft:'3%',
+        marginLeft: '3%',
         marginRight: '4%',
-        
+        '@media (max-width: 600px)': {
+            flexDirection: 'column',
+            width: '100%',
+            marginLeft: '0',
+            marginRight: '0',
+        },
     },
     tt1: {
         fontFamily: 'Poppins',
-        paddingTop:'10px',
+        paddingTop: '10px',
         fontSize: '40px',
         lineHeight: '40px',
         display: 'flex',
@@ -276,7 +264,6 @@ opacity: 1,
         lineHeight: '30px',
         display: 'flex',
         justifyContent: 'center',
-
         letterSpacing: '0px',
         color: '#58595B',
         opacity: 1,
@@ -289,7 +276,6 @@ opacity: 1,
         fontFamily: 'Poppins',
         display: 'flex',
         justifyContent: 'center',
-
         fontSize: '22px',
         lineHeight: '24px',
         letterSpacing: '0px',
@@ -300,99 +286,79 @@ opacity: 1,
             lineHeight: '20px',
         },
     },
-    eventCalander:{
-    width: '237px',
-    height: '237px',
-    position: 'relative',
-    left:'43%',
-    opacity: 1,
-    },
-
-    fourthSplit: {
-        display: 'flex',
-        width: 'fit-screen',
-        backgroundColor: '#962067',
-        borderRadius: '10px',
-        padding: '20px',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginTop: '8px',
-    },
-
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        width: 'fit-screen',
-        color:'#FFFFFF',
-      },
-      featurename: {
-        color:'#E9AFB7',
-        fontFamily:'Poppins',
-        fontSize:'20px',
-      },
-      gridContainer: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        marginTop: '16px',
-      },
-      featureBox: {
-        padding: '16px',
-        textAlign: 'center',
-        borderRadius: '8px',
-        
-      },
-      imagecont: {
-        width: '200px',
-        height: '200px',
-        backgroundColor: 'white',
-        borderRadius: '50%',
-        overflow: 'hidden',
-        marginBottom: '50px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      image: {
-        maxWidth: '60%',
-        height: '60%',
-        
-        objectFit: 'cover', // Ensures the image covers the entire container
-      },
-
-
-
-
-    cardGrid: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        width: '100%',
-    },
-    gridCard: {
-        width: '22%',
-        marginBottom: '20px',
-        '@media (max-width: 960px)': {
-            width: '45%',
-        },
+    eventCalander: {
+        width: '237px',
+        height: '237px',
+        position: 'relative',
+        left: '43%',
+        opacity: 1,
         '@media (max-width: 600px)': {
             width: '100%',
+            height: 'auto',
+            left: '0',
         },
     },
-    seeMoreButton: {
-        display: 'block',
-        margin: '0 auto',
-    },
-    footer: {
+    pastSection: {
         display: 'flex',
+        flex: 0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    pastmain: {
+        display: 'flex',
+        flex: 0,
         width: '100%',
-        height: '80px',
-        backgroundColor: '#962067',
-        borderRadius: '10px 10px 0px 0px',
+        height: '27px',
+        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+        padding: '0px',
+        justifyContent: 'space-between',
+    },
+    imageRounded: {
+        width: '150px',
+        height: '150px',
+        borderRadius: '50%',
+        marginBottom: '20px',
+        '@media (max-width: 600px)': {
+            width: '100px',
+            height: '100px',
+        },
+    },
+    gridContainer: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '20px',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '8px',
+        '@media (max-width: 600px)': {
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        },
+    },
+    feature: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center',
+        backgroundColor: '#FFFFFF',
+        borderRadius: '10px',
+        padding: '20px',
+        boxShadow: '0px 3px 6px #00000029',
+    },
+    title: {
+        fontSize: '20px',
+        fontWeight: 'bold',
+        marginBottom: '10px',
+        '@media (max-width: 600px)': {
+            fontSize: '18px',
+        },
+    },
+    description: {
+        fontSize: '16px',
+        color: '#58595B',
+        '@media (max-width: 600px)': {
+            fontSize: '14px',
+        },
     },
 };
 

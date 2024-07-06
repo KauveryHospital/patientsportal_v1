@@ -51,15 +51,6 @@ const Home = () => {
 
             {/* Second Split */}
             <Box style={styles.secondSplit}>
-            <nav style={styles.nav}>
-        <ul style={styles.navul}>
-          <li><a href="#home" style={styles.navli}> <img src={Images.home} alt="home" />Home</a> </li>
-          <li> <img src={Images.consult}/> <a href="#" style={styles.navli}  Consult /></li>
-          <li> <img src={Images.MHCIcon}/> <a href="#" style={styles.navli}  MHC  /></li>
-          <li><img src={Images.records}/><a href="#" style={styles.navli} Record  /></li>
-          <li> <img src={Images.profile}/><a href="#" style={styles.navli}Login  /></li>
-        </ul>
-      </nav>
                 <Box style={styles.instructions}>
                     <Typography variant="body1" style={styles.ins1}>Welcome to Kauvery Kare!</Typography>
                     <br></br>
@@ -164,23 +155,35 @@ const Home = () => {
             <br></br>
             <br></br>
             <br></br>
-            {/* Fourth Split */}
-            <Box >
-                <Box style={styles.cardGrid}>
-                    {[...Array(showMore ? 8 : 4)].map((_, index) => (
-                        <Card key={index} style={styles.gridCard}>
-                            <CardContent>
-                                <Typography variant="h5">Grid Card {index + 1}</Typography>
-                                <Typography variant="body2">Grid Card content</Typography>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </Box>
-                <Button onClick={handleSeeMore} style={styles.seeMoreButton}>
-                    {showMore ? 'See Less' : 'See More'}
-                </Button>
-            </Box>
+            <div style={{ display: 'flex', justifyContent: 'space-around', padding: '20px' }}>
+      {/* Left side (Facilities) */}
+      <div style={{ width: '50%', borderRadius: '20px', padding: '10px', maxHeight: 'fit-content', overflowY: 'fit-content', backgroundColor: 'white',fontFamily:'Poppins' }}>
+        <h1 style={{ textAlign: 'left' }}>Featured Specialty Areas</h1>
+        {[...Array(7)].map((_, index) => (
+          <div key={`facility-${index}`} style={{ display: 'flex', alignItems: 'left', marginBottom: '10px', border: '1px solid #e0e0e0', height: '80px', borderRadius: '5px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', padding: '10px' }}>
+            <img src={Images.dermatology} alt={`Facility ${index + 1}`} style={{ width: 'fit', height: 'fit', marginRight: '10px' }} />
+            <div>
+              <h2 style={{ margin: '0' }}>Facility {index + 1}</h2>
+              <p style={{ margin: '0' }}>Description of Facility {index + 1}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
+      {/* Right side (Doctors) */}
+      <div style={{ width: '50%', padding: '20px', borderRadius: '20px', maxHeight: '100%', overflowY: 'fit-content', backgroundColor: 'white' }}>
+        <h1 style={{ textAlign: 'left' }}>Top Doctors</h1>
+        {[...Array(4)].map((_, index) => (
+          <div key={`doctor-${index}`} style={{ display: 'flex', alignItems: 'left', marginBottom: '10px', padding: '25px', border: '1px solid #e0e0e0', borderRadius: '5px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+            <img src={`/path/to/doctor-${index + 1}.jpg`} alt={`Doctor ${index + 1}`} style={{ width: '30%', height: '140px', marginRight: '10px' }} />
+            <div>
+              <h2 style={{ margin: '0' }}>Doctor {index + 1}</h2>
+              <p style={{ margin: '0' }}>Details of Doctor {index + 1}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
             {/* Footer */}
             <Box style={styles.footer}>
                 <Typography variant="body2">
