@@ -1,27 +1,17 @@
-import React, { useState, useEffect, useRef, useContext, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import moment from 'moment';
-import {
-  autoFetchPincode,
-  googlePinCode,
-  signUp,
-  GooglePlaceIds,
-} from '../utils/apiCalls'; // Import your utility functions
-import { AppContext } from '../navigation/AppContext'; // Your App context
+import { googlePinCode, signUp, GooglePlaceIds } from '../utils/apiCalls'; // Import your utility functions
 import { styles } from './signup.styles';
 import { getUserInformation, setUserInformation } from '../utils/LocalStorage';
-import { allowOnlyLetter, isResponseIsValid, snackBar } from '../utils/helpers';
+import { isResponseIsValid, snackBar } from '../utils/helpers';
 import {
   NavigationReducer,
   InitialState,
 } from '../store/reducers/NavigationReducer';
 
 const Signup = ({ route, navigation }) => {
-  const bottomSheetRef = useRef();
-  const refRBSheet = useRef();
   const [state, dispatch] = useReducer(NavigationReducer, InitialState);
-
   const [popupLoading, setPopupLoading] = useState(false);
-  const [tickState, setTickState] = useState(false);
   const [signUpState, setSignUpState] = useState(false);
   const [patientName, setPatientName] = useState('');
   const [genderState, setGenderState] = useState('');
@@ -38,62 +28,29 @@ const Signup = ({ route, navigation }) => {
   const [loader, setLoader] = useState(false);
   const [locationSearchResult, setLocationSearchResult] = useState('');
   const [searchedData, setSearchedData] = useState([]);
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-
-  useEffect(() => {
-    getLocationAccess();
-  }, []);
-
-  const getLocationAccess = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const { latitude, longitude } = position.coords;
-          fetchPincode(latitude, longitude);
-        },
-        error => {
-          console.error(error);
-          alert('Geolocation permission denied.');
-        }
-      );
-    } else {
-      alert('Geolocation is not supported by this browser.');
-    }
-  };
-
-  const fetchPincode = async (latitude, longitude) => {
-    setPopupLoading(true);
-    try {
-      const response = await autoFetchPincode(latitude, longitude);
-      if (response.data) {
-        setPinCode(response.data.pincode);
-        setAddress(response.data.address);
-      }
-      setPopupLoading(false);
-    } catch (error) {
-      console.error(error);
-      setPopupLoading(false);
-    }
-  };
 
   useEffect(() => {
     nextButtonValidation();
-  }, [patientName, selectedDate, genderValue, pinCode]);
+  }, [patientName, selectedDate, genderValue, pinCode, address]);
 
   const nextButtonValidation = () => {
     if (
-      patientName === '' ||
-      selectedDate === '' ||
-      genderValue === '' ||
-      pinCode.length !== 6
+      patientName !== '' &&
+      selectedDate !== '' &&
+      genderValue !== '' &&
+      pinCode.length === 6 &&
+      address !== '' &&
+      !nameErrorState &&
+      !dobErrorState &&
+      !pinCodeErrorState
     ) {
-      setSignUpState(false);
-    } else {
       setSignUpState(true);
+    } else {
+      setSignUpState(false);
     }
   };
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
     const body = {
@@ -105,24 +62,23 @@ const Signup = ({ route, navigation }) => {
     };
 
     try {
-      console.log(body, 'body');
+      setLoader(true);
       const response = await signUp(body);
-      console.log(response, 'response');
+      setLoader(false);
       if (isResponseIsValid(response)) {
-        getUserInformation('User_Data').then(res => {
+        getUserInformation('User_Data').then((res) => {
           if (res === null) {
+            return;
           } else {
             var js = JSON.parse(res);
             js.is_registered = 1;
             setUserInformation('User_Data', JSON.stringify(js));
           }
         });
-        setLoader(false);
         setTimeout(() => {
           dispatch({ type: 'SetProfileStatus', payload: '4' });
         }, 200);
       } else {
-        setLoader(false);
         console.log(response?.data, 'Response DATA');
         setTimeout(() => {
           if (response?.data) {
@@ -136,7 +92,7 @@ const Signup = ({ route, navigation }) => {
             }
             snackBar(response?.data?.error);
           } else {
-            snackBar(Headers.apiError);
+            snackBar('API Error');
           }
         }, 400);
       }
@@ -144,13 +100,13 @@ const Signup = ({ route, navigation }) => {
       console.log(err, 'ERROR');
       setLoader(false);
       setTimeout(() => {
-        snackBar(Headers.apiError);
+        snackBar('API Error');
       }, 400);
     }
   };
 
-  const handleSearchChange = async event => {
-    setLocationSearchResult(event.target.value);
+  const handleSearchChange = async (event) => {
+    setAddress(event.target.value);
     if (event.target.value === '') {
       setSearchedData([]);
     } else {
@@ -159,13 +115,13 @@ const Signup = ({ route, navigation }) => {
     }
   };
 
-  const handleLocationSelection = async placeItem => {
+  const handleLocationSelection = async (placeItem) => {
     try {
       const pinCodeDetails = await googlePinCode(placeItem);
       if (pinCodeDetails.data) {
         setPinCode(pinCodeDetails.data.pincode);
         setAddress(pinCodeDetails.data.address);
-        setIsLocationModalOpen(false); // Close the modal
+        setSearchedData([]); // Clear search results after selection
       }
     } catch (error) {
       console.error(error);
@@ -173,43 +129,54 @@ const Signup = ({ route, navigation }) => {
     }
   };
 
-  const LocationModal = ({ isOpen, onClose, onSelect }) => {
-    return (
-      isOpen && (
-        <div className="location-modal" style={styles.modal}>
-          <div className="modal-content" style={styles.modalContent}>
-            <span className="close" onClick={onClose} style={styles.closeButton}>&times;</span>
-            <h2>Enter your location</h2>
-            <input
-              type="text"
-              placeholder="Enter location"
-              value={locationSearchResult} // Controlled input
-              onChange={handleSearchChange} // Handle search change
-              style={styles.searchInput}
-            />
-            <ul style={styles.searchResults}>
-              {searchedData && searchedData.length > 0 ? (
-                searchedData.map((item, index) => (
-                  <li
-                    key={index}
-                    onClick={() => onSelect(item)}
-                    style={styles.searchResultItem}
-                  >
-                    {item.name}, {item.address}
-                  </li>
-                ))
-              ) : (
-                <li style={styles.noResults}>No results found</li>
-              )}
-            </ul>
-          </div>
-        </div>
-      )
-    );
+  const validateName = (name) => {
+    const nameRegex = /^[A-Za-z]{3,}$/;
+    if (!nameRegex.test(name)) {
+      setNameErrorState(true);
+      setNameErrorText('Name should contain only letters and at least 3 characters');
+    } else {
+      setNameErrorState(false);
+      setNameErrorText('');
+    }
+    setPatientName(name);
+    nextButtonValidation();
+  };
+
+  const validateDOB = (date) => {
+    const selected = moment(date);
+    const today = moment();
+    const earliestDate = moment('1801-01-01');
+
+    if (selected.isAfter(today)) {
+      setDobErrorState(true);
+      setDobErrorText('Date of birth cannot be in the future');
+    } else if (selected.isBefore(earliestDate)) {
+      setDobErrorState(true);
+      setDobErrorText('Date of birth cannot be before 1801');
+    } else {
+      setDobErrorState(false);
+      setDobErrorText('');
+    }
+    setSelectedDate(date);
+    nextButtonValidation();
+  };
+
+  const validatePinCode = (pincode) => {
+    const pinCodeRegex = /^\d{6}$/;
+    if (!pinCodeRegex.test(pincode)) {
+      setPinCodeErrorState(true);
+      setPinCodeErrorText('Pincode should be exactly 6 numeric characters');
+    } else {
+      setPinCodeErrorState(false);
+      setPinCodeErrorText('');
+    }
+    setPinCode(pincode);
+    nextButtonValidation();
   };
 
   return (
     <div style={styles.signupContainer}>
+      <div style={styles.backgroundBlur}></div>
       {popupLoading && <div style={styles.loader}>Loading...</div>}
       <h1 style={styles.heading}>Vanakkam! Welcome to Kauvery</h1>
       <p style={styles.subheading}>
@@ -221,27 +188,29 @@ const Signup = ({ route, navigation }) => {
           <input
             type="text"
             value={patientName}
-            onChange={e => setPatientName(e.target.value)}
+            onChange={(e) => validateName(e.target.value)}
             placeholder="Enter patient name"
             required
             style={styles.input}
           />
+          {nameErrorState && <p style={styles.errorText}>{nameErrorText}</p>}
         </div>
         <div style={styles.formGroup}>
           <label style={styles.label}>Date of Birth</label>
           <input
             type="date"
             value={selectedDate}
-            onChange={e => setSelectedDate(e.target.value)}
+            onChange={(e) => validateDOB(e.target.value)}
             required
             style={styles.input}
           />
+          {dobErrorState && <p style={styles.errorText}>{dobErrorText}</p>}
         </div>
         <div style={styles.formGroup}>
           <label style={styles.label}>Gender</label>
           <select
             value={genderValue}
-            onChange={e => setGenderValue(e.target.value)}
+            onChange={(e) => setGenderValue(e.target.value)}
             required
             style={styles.select}
           >
@@ -252,35 +221,51 @@ const Signup = ({ route, navigation }) => {
           </select>
         </div>
         <div style={styles.formGroup}>
-          <label style={styles.label}>Home Pincode</label>
-          <div style={styles.inputGroup}>
-            <input
-              type="text"
-              value={pinCode}
-              onChange={e => setPinCode(e.target.value)}
-              placeholder="Enter your pincode"
-              maxLength={6}
-              required
-              style={styles.input}
-            />
-            <button type="button" onClick={() => setIsLocationModalOpen(true)} style={styles.searchButton}>
-              Search
-            </button>
-          </div>
+          <label style={styles.label}>Address</label>
+          <input
+            type="text"
+            value={address}
+            onChange={handleSearchChange}
+            placeholder="Enter your address"
+            required
+            style={styles.input}
+          />
+          {searchedData.length > 0 && (
+            <ul style={styles.searchResults}>
+              {searchedData.map((item, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleLocationSelection(item)}
+                  style={styles.searchResultItem}
+                >
+                  {item.name}, {item.address}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        <button
-          type="submit"
-          disabled={!signUpState}
-          style={styles.button(signUpState)}
-        >
-          Next
-        </button>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Home Pincode</label>
+          <input
+            type="text"
+            value={pinCode}
+            onChange={(e) => validatePinCode(e.target.value)}
+            placeholder="Enter your pincode"
+            maxLength={6}
+            required
+            style={styles.input}
+          />
+          {pinCodeErrorState && <p style={styles.errorText}>{pinCodeErrorText}</p>}
+        </div>
+        {signUpState && (
+          <button
+            type="submit"
+            style={styles.button(signUpState)}
+          >
+            Next
+          </button>
+        )}
       </form>
-      <LocationModal
-        isOpen={isLocationModalOpen}
-        onClose={() => setIsLocationModalOpen(false)}
-        onSelect={handleLocationSelection}
-      />
     </div>
   );
 };

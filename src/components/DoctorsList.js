@@ -1,109 +1,261 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Dlist.styles'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { Modal, Spinner, Button, Form, Container, Row, Col } from 'react-bootstrap';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import DoctorCard from '../components/DoctorCard';
+import CommonLoader from '../components/CommonLoader';
+import SearchBarField from '../components/SearchBarField';
+import { doctorDetails, doctorsListInConsultation, doctorsListspecializationID, doctorsSearchListInConsultation } from '../utils/apiCalls';
+import { isResponseIsValid, snackBar } from '../utils/helpers';
+import { doctorDetailsItem } from '../store/actions/bookingActions';
+import styles from './consult.styles';
 
 const DoctorsList = () => {
-  const [textInputValue, setTextInputValue] = useState('');
-  const [doctorsList, setDoctorsList] = useState([]);
+  const location = useLocation();
+  const data = location.state || {};
+  const unit_ID = data.unitId;
+  const specializationID = data.specializationID;
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const history=useHistory();
+  const [isActive1, setIsActive1] = useState(true);
+  const [loader, setLoader] = useState(false);
+  const [DoctorsList, setDoctorsList] = useState([]);
+  const [searchDoctorsList, setSearchDoctorsList] = useState([]);
+  const [searchData, setSearchData] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [page_size, setPage_size] = useState(10);
+  const [next_page, setNext_page] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [dataList, setDataList] = useState({});
+  const [docDetailLoading, setDocDetailLoading] = useState(false);
 
-  const city = 'Chennai - Mylapore';
-  const spid = '15646000000000';
-
-  // Dummy data for doctors list (replace with actual data from API)
-  const dummyDoctorsList = [
-    { id: 1, name: 'Dr. John Doe', speciality: 'Cardiology', description: 'Lorem ipsum dolor sit amet.' },
-    { id: 2, name: 'Dr. Jane Smith', speciality: 'Dermatology', description: 'Consectetur adipiscing elit.' },
-    { id: 3, name: 'Dr. Mike Johnson', speciality: 'Orthopedics', description: 'Sed do eiusmod tempor incididunt.' },
-  ];
-
-  const fetchDoctors = async () => {
-    // setLoading(true);
-    // setError('');
-    try {
-      const response = await axios.get(`http://localhost:1800/api/doctors?city=${city}&spid=${spid}`);
-      console.log(response.data);
-      setDoctorsList(response.data);
-    } catch (error) {
-      // setError('Failed to fetch doctors. Please try again.');
-      console.error(error);
-    } finally {
-      // setLoading(false);
-    }
-  };
+  const currentRegionSelected = useSelector(state => state?.homeReducer?.currentRegion);
 
   useEffect(() => {
-    if (city && spid) {
-      fetchDoctors();
+    if (specializationID) {
+      specialityDoctorListAPICall();
+    } else {
+      doctorListAPICall();
     }
-  }, [city, spid]);
+  }, []);
 
-  const handleInputChange = (e) => {
-    setTextInputValue(e.target.value);
+  useEffect(() => {
+    if (searchData.trim() === '') {
+      setSearchDoctorsList([]);
+    } else {
+      const timeoutId = setTimeout(() => {
+        doctorSearchListAPICall();
+      }, 500);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchData]);
+
+  const specialityDoctorListAPICall = async () => {
+    setLoader(true);
+    try {
+      const response = await doctorsListspecializationID(unit_ID, specializationID, page, page_size);
+      if (isResponseIsValid(response)) {
+        if (page === 1) {
+          setDoctorsList(response.data.data);
+        } else {
+          setDoctorsList(prevDoctorsList => [...prevDoctorsList, ...response.data.data]);
+        }
+        setNext_page(response.data.next_page);
+        setPage(page + 1);
+      } else {
+        snackBar(response?.data || 'API Error');
+      }
+    } catch (err) {
+      snackBar('API Error');
+    } finally {
+      setLoader(false);
+    }
   };
 
-  const handleRequestClick = (doctor) => {
-    console.log(doctor);
+  const doctorListAPICall = async () => {
+    setLoader(page === 1);
+    try {
+      const response = await doctorsListInConsultation(unit_ID, currentRegionSelected, page, page_size);
+      if (isResponseIsValid(response)) {
+        if (page === 1) {
+          setDoctorsList(response.data.data);
+        } else {
+          setDoctorsList(prevDoctorsList => [...prevDoctorsList, ...response.data.data]);
+        }
+        setNext_page(response.data.next_page);
+        setPage(page + 1);
+      } else {
+        snackBar(response?.data || 'API Error');
+      }
+    } catch (err) {
+      snackBar('API Error');
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const doctorSearchListAPICall = async () => {
+    try {
+      const response = await doctorsSearchListInConsultation(unit_ID, currentRegionSelected, searchData);
+      if (isResponseIsValid(response)) {
+        setSearchDoctorsList(response.data.data);
+      } else {
+        snackBar(response?.data || 'API Error');
+      }
+    } catch (err) {
+      snackBar('API Error');
+    }
+  };
+
+  const onCallDoctorDetailsApi = async id => {
+    setDocDetailLoading(true);
+    try {
+      const response = await doctorDetails(id);
+      if (isResponseIsValid(response)) {
+        const rp = response.data.data;
+        dispatch(doctorDetailsItem(rp));
+        // Assuming navigation is handled differently in a web app
+        // Example:
+        history.push({
+          pathname: '/selectpatient', state: { isRequest: true }});
+      } else {
+        snackBar(response?.data || 'API Error');
+      }
+    } catch (err) {
+      snackBar('API Error');
+    } finally {
+      setDocDetailLoading(false);
+    }
+  };
+
+  const requestOnPress = item => {
+    onCallDoctorDetailsApi(item._id.$oid);
+  };
+
+  const doctorsRenderItem = item => (
+    <DoctorCard
+      key={item._id.$oid}
+      rawData={item}
+      onPressRequest={() => requestOnPress(item)}
+      onPressBookNow={() => {
+        const doctor_id = item._id.$oid;
+        // Example:
+        history.push({ pathname: '/consultslotbooking', state: { doctor_id: doctor_id, slotCondition: item }});
+      }}
+      onPress={() => {
+        const it = item._id.$oid;
+        // Example:
+        // history.push(item.request_only === 1 ? '/consult-details-request' : '/consult-details', { id: it });
+      }}
+      statusRequest={true}
+      doctorRequest={item.request_only}
+    />
+  );
+
+  const searchDoctorsRenderItem = item => (
+    <DoctorCard
+      key={item._id.$oid}
+      rawData={item}
+      onPress={() => {
+        setIsVisible(false);
+        const it = item._id.$oid;
+        // Example:
+        // history.push(item.request_only === 1 ? '/consult-details-request' : '/consult-details', { id: it });
+      }}
+      statusRequest={true}
+      doctorRequest={item.request_only}
+    />
+  );
+  // console.log(searchData);
+  const onPress = () => {
+    setSearchDoctorsList([]);
+    // Assuming navigation is handled differently in a web app
+    // Example:
     history.push({
-      pathname: '/ddetail',
-      state: { doctor }
+      pathname: '/search',
+      state: { unitId: unit_ID, specializationID: specializationID }
     });
   };
 
-  const handleSearchDoctors = () => {
-    // Perform search logic here (e.g., fetch doctors list based on input)
-    // For demonstration, using dummy data
-    setDoctorsList(dummyDoctorsList.filter(doctor =>
-      doctor.name.toLowerCase().includes(textInputValue.toLowerCase())
-    ));
+  const loadMoreDoctors = () => {
+    if (!loadingMore && next_page) {
+      setLoadingMore(true);
+      if (!specializationID) {
+        doctorListAPICall().finally(() => setLoadingMore(false));
+      } else {
+        specialityDoctorListAPICall().finally(() => setLoadingMore(false));
+      }
+    }
+  };
+
+  const renderFooter = () => {
+    if (next_page) {
+      return (
+        <div style={styles.footerComponent}>
+          <Spinner animation="border" variant="primary" />
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.searchContainer}>
-        <input
-          type="text"
-          placeholder="Search for doctors..."
-          style={styles.input}
-          value={textInputValue}
-          onChange={handleInputChange}
-        />
-        <button
-          style={{ ...styles.button, ...(textInputValue.trim() !== '' && styles.buttonHover) }}
-          onClick={handleSearchDoctors}
-        >
-          Search
-        </button>
-      </div>
-
-      <div style={styles.doctorsList}>
-        <h2>Doctors List</h2>
-        <div style={styles.cardsContainer}>
-          {doctorsList.map(doctor => (
-            <div key={doctor.doctorId} style={styles.doctorCard}>
-              <img
-                src={`https://via.placeholder.com/150?text=${doctor.name}`}
-                alt={doctor.doctorName}
-                style={styles.doctorImage}
+    <Container fluid style={styles.container}>
+      <Modal show={isVisible} onHide={() => setIsVisible(false)} backdrop="static" keyboard={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Book Consultation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="search">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search for doctors and specialties"
+              value={searchData}
+              onChange={e => setSearchData(e.target.value)}
+            />
+            {searchData !== '' && (
+              <Button variant="outline-secondary" onClick={() => setSearchData('')}>
+                Clear
+              </Button>
+            )}
+          </Form.Group>
+          <div>
+            {searchDoctorsList.map(searchDoctorsRenderItem)}
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Row className="justify-content-center">
+        <Col md={8}>
+          <div style={styles.topView}>
+            <div style={styles.searchBarContainer}>
+              <SearchBarField
+                title="Search for doctors and specialties"
+                value={searchData}
+                onChange={e => setSearchData(e.target.value)}
+                onPress={onPress}
               />
-              <div style={styles.doctorDetails}>
-                <h3>{doctor.doctorName}</h3>
-                <p>{doctor.specialtyName}</p>
-                <p>This doctor is currently not available for consultations. Please request to make an appointment.</p>
-                <button
-                  onClick={() => handleRequestClick(doctor)}
-                  style={styles.button}
-                >
-                  Request
-                </button>
-              </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
+          </div>
+          {loader ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+              <Spinner animation="border" variant="primary" />
+            </div>
+          ) : (
+            <div>
+              {DoctorsList.map(doctorsRenderItem)}
+              {renderFooter()}
+            </div>
+          )}
+        </Col>
+      </Row>
+      <CommonLoader loading={docDetailLoading} />
+    </Container>
   );
 };
 

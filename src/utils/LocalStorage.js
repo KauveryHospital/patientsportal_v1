@@ -41,6 +41,18 @@ const setUserInformation = async (USER_KEY, value) => {
       console.error('Error clearing information:', error);
     }
   };
+
+  const getSecondaryProfileID = async USER_KEY => {
+    localStorage.getItem(USER_KEY);
+  };
+
+  const setPayCheckoutSuccess = async (USER_KEY, value) => {
+    localStorage.setItem(USER_KEY, value);
+  };
+
+  const setWebHookCheckout = async (USER_KEY, value) => {
+    localStorage.setItem(USER_KEY, value);
+  };
   
   export {
     setUserInformation,
@@ -48,5 +60,8 @@ const setUserInformation = async (USER_KEY, value) => {
     setIntroStatus,
     getIntroStatus,
     clearInfo,
+    getSecondaryProfileID,
+    setPayCheckoutSuccess,
+    setWebHookCheckout
   };
   

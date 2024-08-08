@@ -43,6 +43,12 @@ const styles = {
   },
   searchBarContainer: {
     marginBottom: '5px',
+    borderRadius: '5px', 
+    borderWidth: '0.2px', 
+    // borderColor: '#ddd',
+    padding: '10px', 
+    marginBottom: '0px', 
+    marginHorizontal: '20px',
   },
   searchBarView: {
     height: '40px',

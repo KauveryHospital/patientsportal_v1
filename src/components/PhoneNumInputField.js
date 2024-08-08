@@ -11,20 +11,22 @@ const styles = is_error => ({
     height: dimen_size_height(11.7),
   },
   container: {
-    border: is_error ? `1px solid ${COLORS.errorColor}` : `1px solid ${COLORS.borderColor}`,
-    padding: '10px',
+    border: is_error ? `1px solid ${COLORS.errorColor}` : `0px solid ${COLORS.borderColor}`,
+    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+    padding: '7px',
     borderRadius: '4px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.primaryBackgroundColor,
+    width: '60%'
   },
   flagContainer: {
     marginRight: '5px',
   },
   flagImage: {
-    width: '22px',
-    height: '23px',
+    width: '18px',
+    height: '25px',
     objectFit: 'contain',
   },
   fieldTitleContainer: {
@@ -38,25 +40,29 @@ const styles = is_error => ({
   },
   fieldTitle: {
     color: COLORS.textColor,
-    fontSize: '12px',
+    fontSize: '9px',
+    fontFamily: 'Poppins'
   },
   prefix: {
     color: COLORS.textColor,
-    fontSize: '12px',
+    fontSize: '14px',
     marginRight: '5px',
+    fontFamily: 'Poppins'
   },
   textInput: {
     flex: 1,
     textAlign: 'left',
-    color: is_error ? COLORS.errorColor : COLORS.textColor,
-    fontSize: '12px',
+    color: is_error ? COLORS.errorColor : COLORS.placeholderColor,
+    fontSize: '14px',
     border: 'none',
     outline: 'none',
+    fontFamily: 'Poppins'
   },
   errorText: {
     color: COLORS.errorColor,
     fontSize: '11px',
     marginTop: '5px',
+    fontFamily: 'Poppins'
   },
 });
 

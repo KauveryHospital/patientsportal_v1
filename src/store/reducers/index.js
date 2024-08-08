@@ -5,12 +5,17 @@ import {StaticReducer} from './StaticReducer';
 import { authReducer } from './authReducer';
 import { homeReducer } from './homeReducer';
 import { bookingReducer } from './bookingReducer';
+import { recordReducer } from './recordReducer';
+import { NavigationReducer } from './NavigationReducer';
+
 const appReducer = combineReducers({
   IntroSliderReducer,
   StaticReducer,
   authReducer,
   homeReducer,
   bookingReducer,
+  recordReducer,
+  NavigationReducer
 });
 
 const rootReducer = (state, action) => {

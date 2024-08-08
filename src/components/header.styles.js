@@ -1,47 +1,68 @@
-const styles = {
-  container: {
+import { COLORS, FONTS } from "../constants/Theme";
+
+const generateMenuItemStyles = (activeMenuItem) => ({
+  headerContainer: {
+    width: '100%',
     backgroundColor: '#FFFFFF',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    padding: '10px 20px',
     display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    boxShadow: '0px 0.5px 0.1px rgba(0, 0, 0, 0.3)',
-    padding: '16px',
-    position: 'relative',
+    boxSizing: 'border-box',
   },
   logoView: {
-    flex: 1,
     display: 'flex',
     alignItems: 'center',
   },
-  locationView: {
+  topLogo: {
+    width: '140px',
+    height: 'auto',
+  },
+  menuContainer: {
+    display: 'flex',
+    justifyContent: 'center',
     flex: 1,
+    marginLeft: '20px',
+    marginRight: '20px',
+  },
+  menuItem: {
+    fontFamily: FONTS.homeTitle,
+    fontWeight: 'bold',
+    margin: '0 15px',
+    cursor: 'pointer',
+    color: COLORS.primaryColor,
+    position: 'relative',
+    paddingBottom: activeMenuItem === 'Home' ? '3px' : '0',
+  },
+  underline: {
+    position: 'absolute',
+    bottom: '0',
+    left: '0',
+    width: '100%',
+    height: '2px',
+    backgroundColor: COLORS.activeMenuItemColor,
+  },
+  locationView: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
     cursor: 'pointer',
-  },
-  notificationView: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  notificationIcon: {
-    height: '23px',
-    width: '18px',
+    marginRight: '20px',
+    position: 'relative',
   },
   locationIcon: {
-    height: '16px',
-    width: '16px',
+    width: '20px',
+    height: '20px',
+    marginRight: '8px',
   },
   locationText: {
-    fontSize: '16px',
-    fontFamily: 'Arial, sans-serif',
-    color: '#333333',
-    marginLeft: '6px',
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.textColor,
     marginRight: '5px',
   },
   dropdownArrow: {
@@ -78,25 +99,44 @@ const styles = {
   dropDownTitle2: {
     color: '#333333',
   },
-  homeContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: '14px',
-  },
-  menuContainer: {
+  rightContent: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    marginTop: '16px',
   },
-  menuItem: {
-    fontSize: '16px',
-    fontFamily: 'Arial, sans-serif',
-    color: '#333333',
+  greeting: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    marginRight: '20px',
+  },
+  heyText: {
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.textColor,
+  },
+  nameDropDown: {
+    display: 'flex',
+    alignItems: 'center',
     cursor: 'pointer',
-    padding: '8px 16px',
   },
-};
+  nameText: {
+    fontFamily: FONTS.homeTitle,
+    color: COLORS.primaryColor,
+    marginRight: '5px',
+  },
+  welcomeText: {
+    fontFamily: FONTS.iconText,
+    color: COLORS.textColor,
+    marginTop: '3px',
+    fontSize: '13px',
+  },
+  notificationView: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  notificationIcon: {
+    width: '24px',
+    height: '24px',
+  },
+});
 
-export default styles;
+export default generateMenuItemStyles;

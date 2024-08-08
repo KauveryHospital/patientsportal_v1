@@ -1,0 +1,30 @@
+.datePickerContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .dateText {
+    margin-right: 10px;
+  }
+  
+  .calendarIconContainer {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .calendarIcon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .dateItem {
+    padding: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .selectedDateItem {
+    background-color: #FFDFF3;
+  }
+  

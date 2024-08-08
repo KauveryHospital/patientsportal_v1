@@ -24,6 +24,7 @@ httpClient.interceptors.request.use(
       console.log('TokenData', tokenData);
       config.headers.Authorization = `Token ${tokenData?.token}`;
     }
+    
     return config;
   },
   function (error) {

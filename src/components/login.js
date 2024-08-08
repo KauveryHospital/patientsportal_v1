@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { CommonButton } from '../components/CommonButton';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Modal from 'react-modal'; // Importing Modal
+import CommonButton from '../components/CommonButton';
 import { PhoneNumInputField } from '../components/PhoneNumInputField';
 import { auth_content } from '../constants/strings';
-import styles from './Login.styles';
 import Images from '../constants/Images';
-import { useHistory } from 'react-router-dom';
-import {allowNumOnly, isResponseIsValid, snackBar} from '../utils/helpers';
-import {verifyNumber} from '../utils/apiCalls';
+import { verifyNumber } from '../utils/apiCalls';
 import DeviceDetector from 'device-detector-js';
-import {useDispatch} from 'react-redux';
-import {loginResponse} from '../store/actions/authActions';
+import { loginResponse } from '../store/actions/authActions';
+import TermsAndConditionsModal from './TermsConditionsModal';
+import PrivacyPolicy from './PrivacyPolicy1';
+import styles from './Login.styles';
+import { isResponseIsValid, snackBar } from '../utils/helpers';
 
 const Login = ({ navigation }) => {
   const [number, setNumber] = useState('');
@@ -18,15 +21,17 @@ const Login = ({ navigation }) => {
   const [checked, setChecked] = useState(false);
   const [checkBoxDisable, setCheckBoxDisable] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
 
   const history = useHistory();
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onChangeNum = (num) => {
     setIsError(false);
-    setNumber(num.replace(/\D/g, ''));
-    if (num.length !== 10) {
+    const cleanedNum = num.replace(/\D/g, '');
+    setNumber(cleanedNum);
+    if (cleanedNum.length !== 10 || !/^[6789]\d{9}$/.test(cleanedNum)) {
       setIsError(true);
       setErrorText('Enter a valid mobile number');
     } else {
@@ -36,8 +41,6 @@ const Login = ({ navigation }) => {
 
   const verifyNumberFunc = () => {
     setCheckBoxDisable(true);
-    // Implement verifyNumberApiCall for web    
-    // history.push('/otp');
     verifyNumberApiCall();
   };
 
@@ -56,20 +59,17 @@ const Login = ({ navigation }) => {
         getDeviceId: navigator.userAgent,
         getDeviceName: device.device.brand,
         getModel: device.device.model,
-        getUniqueId: navigator.userAgent, // Using userAgent as a placeholder
+        getUniqueId: navigator.userAgent,
       },
     };
-    
-    console.log('Body', body);
 
     try {
       const response = await verifyNumber(body);
-      
+
       if (isResponseIsValid(response)) {
-        console.log(response.data, 'response');
         dispatch(loginResponse(response?.data));
         setLoader(false);
-        history.push('/otp'); // Navigating to OTPVerify page
+        history.replace('/otp');
         setTimeout(() => {
           setCheckBoxDisable(false);
         }, 500);
@@ -96,72 +96,78 @@ const Login = ({ navigation }) => {
     }
   };
 
-  const navigateTo = (path) => {
-    history.push(path);
-  };
-
   return (
     <div style={styles.container}>
-      <div style={styles.logoContainer}>
-        <img src={Images.Logo_Hq} alt="Logo" style={styles.logo} />
-      </div>
-      <div style={styles.mainView}>
-        <div style={styles.inputParentView}>
-          <h2 style={styles.titleLarge}>
-            Enter your mobile number to verify with OTP
-          </h2>
-          <div style={styles.inputFieldView}>
-            <PhoneNumInputField
-              value={number}
-              handleInputChange={(val) => onChangeNum(val)}
-              fieldTitle={auth_content.MobileNumber}
-              placeholder={auth_content.PhoneNumber}
-              is_error={isError}
-              errorText={errorText}
-              maxLength={10}
+      <div style={styles.backgroundBlur}></div>
+      <div style={styles.mainContent}>
+        {/* <div style={styles.logoContainer}>
+          <img src={Images.Logo_Hq} alt="Logo" style={styles.logo} />
+        </div> */}
+        <div style={styles.mainView}>
+          <div style={styles.inputParentView}>
+            <h2 style={styles.titleLarge}>
+              Enter your mobile number to verify with OTP
+            </h2>
+            <div style={styles.inputFieldView}>
+              <PhoneNumInputField
+                value={number}
+                handleInputChange={(val) => onChangeNum(val)}
+                fieldTitle={auth_content.MobileNumber}
+                placeholder={auth_content.PhoneNumber}
+                is_error={isError}
+                errorText={errorText}
+                maxLength={10}
+              />
+            </div>
+          </div>
+          <div style={styles.TAndCView}>
+            <label style={styles.checkBoxLabel}>
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() => setChecked(!checked)}
+                disabled={checkBoxDisable}
+              />
+              <span style={styles.checkBoxText}>I agree to the</span>
+              <span
+                style={styles.checkBoxText2}
+                className="linkText"
+                onClick={() => setIsModalOpen(true)}
+              >
+                {'Terms and conditions'}
+              </span>
+              <span style={styles.checkBoxText}> and</span>
+              <span
+                style={styles.checkBoxText2}
+                className="linkText"
+                onClick={() => setIsModalOpen1(true)}
+              >
+                {'Privacy Policy'}
+              </span>
+              <span style={styles.checkBoxText}>
+                {'of Kauvery Kare'}
+              </span>
+            </label>
+          </div>
+          <div style={styles.buttonView}>
+            <CommonButton
+              text={auth_content.Verify}
+              isLoading={loader}
+              onPress={verifyNumberFunc}
+              disabled={number.length !== 10 || !checked}
+              style={styles.verifyButtonStyle}
             />
           </div>
         </div>
       </div>
-      <div style={styles.bottomView}>
-        <div style={styles.TAndCView}>
-          <label style={styles.checkBoxLabel}>
-            <input
-              type="checkbox"
-              checked={checked}
-              onChange={() => setChecked(!checked)}
-              disabled={checkBoxDisable}
-            />
-            <span style={styles.checkBoxText}>I agree to the</span>
-            <span style={styles.checkBoxText2}
-              className="linkText"
-              onClick={() => navigation.navigate('TermsAndConditionLogin')}
-            >
-              {'Terms and conditions'}
-            </span>
-            <span style={styles.checkBoxText}> and</span>
-            <span style={styles.checkBoxText2}
-              className="linkText"
-              onClick={() => navigation.navigate('PrivacyPolicyLogin')}
-            >
-              {'Privacy Policy'}
-            </span>
-            <span style={styles.checkBoxText}>
-              {'of Kauvery Kare'}
-            </span>
-          </label>
-        </div>
-        <div style={styles.buttonView}>
-          <CommonButton
-            text={auth_content.Verify}
-            isLoading={loader}
-            onPress={verifyNumberFunc}
-            disabled={number.length !== 10 || !checked}
-            style={styles.verifyButtonStyle}
-            // onClick={() => navigateTo('/home')}
-          />
-        </div>
-      </div>
+      <TermsAndConditionsModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+      />
+      <PrivacyPolicy
+        isOpen={isModalOpen1}
+        onRequestClose={() => setIsModalOpen1(false)}
+      />
     </div>
   );
 };

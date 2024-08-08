@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Image, Text, Platform, Alert } from 'react-native';
+// import { View, Image, Text, Platform, Alert } from 'react-native';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { ScaledSheet } from 'react-native-size-matters';

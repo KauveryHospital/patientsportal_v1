@@ -1,8 +1,125 @@
 import React from 'react';
-import styles from './card.styles';
-import { formatDate, formatDateTime } from '../utils/helpers';
+import { Card, CardContent, Typography, Box, Button, IconButton } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import FastImage from 'react-fast-image';
+import { formatDate, formatDateTime } from 'path-to-your-helpers';
+import { COLORS } from '../constants/Theme';
+import Images from '../constants/Images';
 
-export const EventCard = ({
+const useStyles = styled({
+  cardShadow: {
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+    marginBottom: '16px',
+  },
+  eventCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    overflow: 'hidden',
+  },
+  eventCardView1: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: '16px',
+  },
+  eventIcon: {
+    width: '40px',
+    height: '40px',
+  },
+  eventTitleView: {
+    flex: 1,
+    marginLeft: '16px',
+  },
+  eventTitle: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+  },
+  dayText: {
+    fontSize: '14px',
+    color: '#888',
+  },
+  eventStatusView: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  statusButton: {
+    padding: '4px 8px',
+    borderRadius: '4px',
+  },
+  statusText: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+  },
+  eventCardView2: {
+    padding: '0 16px 16px',
+  },
+  locationView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  locationIcon: {
+    width: '20px',
+    height: '20px',
+  },
+  locationTextView: {
+    marginLeft: '8px',
+  },
+  cityText: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+  },
+  address: {
+    fontSize: '12px',
+    color: '#888',
+  },
+  eventCardView3: {
+    padding: '16px',
+  },
+  textView: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  docNameText: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+  },
+  patientText: {
+    fontSize: '12px',
+    color: '#888',
+  },
+  patientText2: {
+    fontSize: '12px',
+    color: COLORS.textColor,
+  },
+  joinNowView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  joinNowButton: {
+    padding: '8px 16px',
+    borderRadius: '4px',
+  },
+  joinNowText: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+  },
+  rescheduleButton: {
+    marginLeft: '8px',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    backgroundColor: '#ddd',
+  },
+  rescheduleButtonText: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+  },
+});
+
+const EventCard = ({
   consultType = 'Offline',
   onPressReschedule,
   item,
@@ -12,102 +129,92 @@ export const EventCard = ({
   color,
   onPressEventCard,
 }) => {
+  const styles = useStyles();
+
   return (
-    <div
-      style={styles.eventCard}
-      onClick={() => onPressEventCard(item)}
-      onMouseEnter={(e) => e.currentTarget.style.boxShadow = styles.eventCardHover.boxShadow}
-      onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
-      disabled={item?.ui_booking_status !== "Active"}
-    >
-      <div style={styles.eventCardView1}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={styles.eventTitleView}>
-            <span style={styles.eventTitle} title={consultType == 'Offline' ? 'Hospital Visit' : 'Video consultation'}>
-              {consultType === 'Offline' ? 'Hospital Visit' : 'Video consultation'}
-            </span>
-            <span style={styles.dayText}>
-              {`${formatDate(item?.slot_details[0]?.slot_date)}, ${item?.slot_details[0]?.slot_start_time?.toUpperCase()}`}
-            </span>
-          </div>
-          <div style={styles.eventStatusView}>
-            <div
-              style={{
-                ...styles.statusButton,
-                backgroundColor: backgroundColor,
-              }}
-            >
-              <span
-                style={{
-                  ...styles.statusText,
-                  color: color,
-                }}
-              >
+    <Card className={styles.cardShadow} onClick={() => onPressEventCard(item)} disabled={item?.ui_booking_status !== 'Active'}>
+      <Box className={styles.eventCard}>
+        <Box className={styles.eventCardView1}>
+          <FastImage
+            src={
+              consultType === 'Offline'
+                ? Images.EventHospitalVisitIcon
+                : consultType === 'mhc'
+                ? Images.EventHealthCheckupIcon
+                : Images.EventVideoConsultantIcon
+            }
+            className={styles.eventIcon}
+          />
+          <Box className={styles.eventTitleView}>
+            <Typography className={styles.eventTitle}>
+              {consultType === 'Offline'
+                ? 'Hospital visit'
+                : consultType === 'mhc'
+                ? 'Health checkup'
+                : 'Video consultation'}
+            </Typography>
+            <Typography className={styles.dayText}>
+              {consultType === 'mhc'
+                ? formatDate(item?.slot_details[0]?.slot_date)
+                : `${formatDate(item?.slot_details[0]?.slot_date)}, ${item?.slot_details[0]?.slot_start_time?.toUpperCase()}`}
+            </Typography>
+          </Box>
+          <Box className={styles.eventStatusView}>
+            <Box className={styles.statusButton} style={{ backgroundColor }}>
+              <Typography className={styles.statusText} style={{ color }}>
                 {item?.ui_booking_status}
-              </span>
-            </div>
-          </div>
-        </div>
-        {consultType === 'Offline' && (
-          <div style={styles.eventCardView2}>
-            <div style={styles.locationView}>
-              <img
-                src="path-to-your-distance-icon" // replace with your actual image path
-                alt="distance"
-                style={styles.locationIcon}
-              />
-              <div style={styles.locationTextView}>
-                <span style={styles.cityText}>
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+        {(consultType === 'Offline' || consultType === 'mhc') && (
+          <Box className={styles.eventCardView2}>
+            <Box className={styles.locationView}>
+              <FastImage src={Images.distance} className={styles.locationIcon} />
+              <Box className={styles.locationTextView}>
+                <Typography className={styles.cityText}>
                   {item?.slot_details[0]?.unit_details?.unit_name}
-                </span>
-                <span style={styles.address}>
+                </Typography>
+                <Typography className={styles.address}>
                   {item?.slot_details[0]?.unit_details?.address}
-                </span>
-              </div>
-            </div>
-          </div>
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
         )}
-      </div>
-      <div style={styles.eventCardView3}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={styles.textView}>
-            <span style={styles.docNameText}>
-              {`${item?.slot_details[0]?.doctor_name}`}
-            </span>
-            <div>
-              <span style={styles.patientText}>Patient: </span>
-              <span style={styles.patientText2}>{item?.patient_name}</span>
-            </div>
-          </div>
-          <div
-            style={{
-              ...styles.joinNowView,
-              justifyContent: item.is_reschedule ? 'flex-start' : 'flex-end',
-            }}
-          >
-            <button
-              onClick={() => onPressJoinNow(item)}
-              disabled={disabled}
-              style={{
-                ...styles.joinNowButton,
-                backgroundColor: disabled ? '#EAD3E1' : '#007bff', // replace with your primary color
-              }}
-            >
-              <span style={styles.joinNowText}>Join Now</span>
-            </button>
-            {item.is_reschedule && (
-              <button
-                style={styles.rescheduleButton}
-                onClick={() => onPressReschedule(item)}
-              >
-                <span style={styles.rescheduleButtonText}>Reschedule</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+        <Box className={styles.eventCardView3}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Box className={styles.textView}>
+              <Typography className={styles.docNameText}>
+                {consultType === 'mhc' ? item?.package_name : item?.slot_details[0]?.doctor_name}
+              </Typography>
+              <Typography>
+                <Typography component="span" className={styles.patientText}>Patient: </Typography>
+                <Typography component="span" className={styles.patientText2}>{item?.patient_name}</Typography>
+              </Typography>
+            </Box>
+            <Box className={styles.joinNowView}>
+              {consultType !== 'mhc' && (
+                <Button
+                  onClick={() => onPressJoinNow(item)}
+                  disabled={disabled}
+                  className={styles.joinNowButton}
+                  style={{ backgroundColor: disabled ? '#EAD3E1' : COLORS.primaryColor }}
+                >
+                  <Typography className={styles.joinNowText}>Join Now</Typography>
+                </Button>
+              )}
+              {item.is_reschedule && (
+                <Button onClick={() => onPressReschedule(item)} className={styles.rescheduleButton}>
+                  <Typography className={styles.rescheduleButtonText}>Reschedule</Typography>
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Card>
   );
 };
 
-
+export default EventCard;

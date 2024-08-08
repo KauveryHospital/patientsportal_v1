@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {onApiCall} from './CommonApi';
 import {BASE_URL} from './constant';
 import {onApiSecondaryCall} from './secondaryCommonApi';
@@ -11,7 +12,7 @@ export const sliderStaticData = () => {
 
 export const verifyNumber = body => {
   return onApiCall({
-    url: BASE_URL + `user/mn-process/`,
+    url: BASE_URL + `user/v2/mn-process/`,
     method: 'POST',
     data: body,
   });
@@ -27,7 +28,7 @@ export const verifyOTP = body => {
 
 export const resendOTP = body => {
   return onApiCall({
-    url: BASE_URL + `user/mn-otp-resend/`,
+    url: BASE_URL + `user/v2/mn-otp-resend/`,
     method: 'POST',
     data: body,
   });
@@ -274,6 +275,7 @@ export const doctorDetails = text => {
   });
 };
 export const specializationList = (unitID, page, page_size, region) => {
+  console.log('spec input',`hms/0/specialization/list/?unit_id=${unitID}&page=${page}&page_size=${page_size}&region=${region}`)
   return onApiCall({
     url:
       BASE_URL +
@@ -308,7 +310,7 @@ export const nearbyUnits = (coordinates, region) => {
   });
 };
 
-export const nearbyUnitsRegion = region => {
+export const nearbyUnitsRegion = (region = '') => {
   return onApiCall({
     url: BASE_URL + `hms/0/units/nearby/?region=${region}`,
     method: 'GET',
@@ -329,11 +331,11 @@ export const nearbyUnitsCoordinates = coordinates => {
   });
 };
 
-export const doctorsListInConsultation = (unitID, region, page, page_size) => {
+export const doctorsListInConsultation = (unitID = '', region, page, page_size,search = '', specializationID = '', spec_name = '') => {
   return onApiCall({
     url:
       BASE_URL +
-      `hms/0/doctor/list/?unit_id=${unitID}&page=${page}&page_size=${page_size}`,
+      `hms/0/doctor/list/?unit_id=${unitID}&page=${page}&page_size=${page_size}&search=${search}&specialization_id=${specializationID}&spec_name=${spec_name}`,
     method: 'GET',
   });
 };
@@ -430,9 +432,9 @@ export const createWebHooks = body => {
   });
 };
 
-export const upcomingEvents = () => {
+export const upcomingEvents = (page, pageSize) => {
   return onApiCall({
-    url: BASE_URL + 'booking/0/events/',
+    url: BASE_URL + `booking/0/events/?page=${page}&page_size=${pageSize}`,
     method: 'GET',
   });
 };
@@ -463,6 +465,13 @@ export const reScheduleBooking = id => {
 export const getReasonAPICall = id => {
   return onApiCall({
     url: BASE_URL + `base/appoinment-cancel/dropdown/`,
+    method: 'GET',
+  });
+}
+
+export const getReasonAPIMhcCall = id => {
+  return onApiCall({
+    url: BASE_URL + `base/mhc-appointment-cancel/dropdown/`,
     method: 'GET',
   });
 }
@@ -511,10 +520,11 @@ export const deleteProfileReasonList = () => {
   });
 }
 
-export const logoutApi = () => {
+export const logoutApi = (input) => {
   return onApiCall({
     url: BASE_URL + 'user/logout/',
     method: 'POST',
+    data: input,
   });
 }
 
@@ -524,3 +534,179 @@ export const autoFetchPincode = (lat,lng) => {
     method: 'GET',
   });
 };
+
+
+// Records 
+
+export const uploadRecord = (input) => {
+  return onApiCall({
+    url: BASE_URL + 'report/0/upload/',
+    method: 'POST',
+    data: input,
+    profileSwitch: true
+  });
+};
+
+export const myUploadList = (search,sort,page = 1,page_size = 10,profile_id = '') => {
+  console.log('idddddddddd', profile_id);
+  return onApiCall({
+    url: BASE_URL + `report/0/list/?profile_id=${profile_id}&search=${search}&sort=${sort}&page=${page}&page_size=${page_size}`,
+    method: 'GET',
+    profileSwitch: true
+  });
+};
+
+
+export const myUploadRename = (input) =>{
+  return onApiCall({
+    url: BASE_URL + `report/0/rename/`,
+    method: 'PATCH',
+    data:input,
+    profileSwitch: true
+  });
+}
+
+export const myUploadDelete = async (file_id) =>{
+  console.log('file input',file_id)
+  return onApiCall({
+    url: BASE_URL + `report/0/delete/?file_id=${file_id}`,
+    method: 'DELETE',
+    profileSwitch: true
+  });
+}
+
+export const hospitalRecordList = (refType,profileID=[],page = 1,page_size = 10,search,sort) => {
+ // alert(profileID)
+ console.log('search input',BASE_URL + `report/0/hsptl/list/?ref_type=${refType}&profile_ids=['${profileID}']&page=${page}&page_size=${page_size}&search=${search}&sort=${sort}`)
+  return onApiCall({
+    url: BASE_URL + `report/0/hsptl/list/?ref_type=${refType}&profile_ids=['${profileID}']&page=${page}&page_size=${page_size}&search=${search}&sort=${sort}`,
+    method: 'GET',
+    profileSwitch: true
+  });
+};
+
+export const MHCList = ({page = 1,page_size = 2,profile_id,test_category,search}) => {
+  return onApiCall({
+    url: BASE_URL + `mhc/0/list/?page=${page}&page_size=${page_size}&profile_id=${profile_id}&test_category=${test_category}&search=${search}`,
+    method: 'GET',
+    profileSwitch: true
+  });
+};
+
+export const MHCListWithoutSearch = ({page = 1,page_size = 2,profile_id,test_category}) => {
+  return onApiCall({
+    url: BASE_URL + `mhc/0/list/?page=${page}&page_size=${page_size}&profile_id=${profile_id}&test_category=${test_category}`,
+    method: 'GET',
+    profileSwitch: true
+  });
+};
+
+export const MHCSlotList = (page = 1,page_size = 5,input) => {
+  return onApiCall({
+    url: BASE_URL + `mhc/0/slot/list/?page=${page}&page_size=${page_size}`,
+    method: 'POST',
+    data: input,
+    profileSwitch: true
+  });
+};
+
+export const createMhcCheckout = body => {
+  return onApiCall({
+    url: BASE_URL + 'mhc/0/create/',
+    method: 'POST',
+    data: body,
+  });
+};
+
+export const createMhcPayAtHospital = body => {
+  return onApiCall({
+    url: BASE_URL + 'mhc/1/create/',
+    method: 'POST',
+    data: body,
+  });
+};
+
+export const createMHCWebHooks = body => {
+  return onApiCall({
+    url: BASE_URL + 'payment/0/mhc/webhook/',
+    method: 'POST',
+    data: body,
+  });
+};
+
+export const mhcBookingDetailView = (booking_id) => {
+  return onApiCall({
+    url: BASE_URL + `mhc/0/detail/view/${booking_id}`,
+    method: 'GET',
+    profileSwitch: true
+  });
+};
+
+export const mhcCancelBookingAPICall = (body, PaymentSuccess) => {
+  return onApiCall({
+    url: BASE_URL + `mhc/${PaymentSuccess}/refund/cancel/`,
+    method: 'POST',
+    data: body,
+    profileSwitch: true
+  });
+};
+
+export const mhcUpdateReschedule = body => {
+  return onApiCall({
+    url: BASE_URL + 'mhc/1/update/',
+    method: 'PATCH',
+    data: body,
+    profileSwitch: true
+  });
+};
+
+export const mhcTestDetailView = (test_id) => {
+  return onApiCall({
+    url: BASE_URL + `mhc/0/test/detail/?test_id=${test_id}`,
+    method: 'GET',
+    profileSwitch: true
+  });
+};
+
+export const mhcBookingInitialize = _id => {
+  return onApiCall({
+    url: BASE_URL + `payment/1/intialize/${_id}/`,
+    method: 'GET',
+  });
+};
+//Notification
+export const notificationList = (page, page_size) => {
+  return onApiCall({
+    url: BASE_URL + `notification/1/list/?page_size=${page_size}&page=${page}`,
+    method: 'GET',
+  });
+};
+
+export const updateNotification = (notification_id) => {
+  return onApiCall({
+    url: BASE_URL + `notification/1/update/?notification_id=${notification_id}`,
+    method: 'PATCH',
+  });
+};
+
+export const clearAllNotification = (profile_id) => {
+  return onApiCall({
+    url: BASE_URL + `notification/1/update/?profile_id=${profile_id}`,
+    method: 'PATCH',
+  });
+};
+
+export const notificationBadgeUpdate = () => {
+  return onApiCall({
+    url: BASE_URL + `notification/0/list/`,
+    method: 'GET',
+  });
+};
+
+export const notificationViewed = () => {
+  return onApiCall({
+    url: BASE_URL + `notification/1/update/?is_viewed=1`,
+    method: 'PATCH',
+  });
+};
+

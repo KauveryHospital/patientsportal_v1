@@ -1,17 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FastImage } from 'react-fast-image'; // Update the import if you are using a different image library
 import styles from './SearchBarFieldstyles'; // Adjust the path as needed
 import Images from '../constants/Images'; // Adjust the path as needed
 
-const SearchBarField = ({ title = '', onPress }) => {
+const SearchBarField = ({ title = '', value, onChange, onPress }) => {
   return (
-    <div onClick={onPress} style={styles.container}>
+    <div style={styles.container}>
       <div style={styles.textInputContainer}>
-        <p style={styles.title} title={title}>{title}</p>
+        <input
+          type="text"
+          placeholder={title}
+          value={value}
+          onChange={onChange}
+          style={styles.input}
+          onClick={onPress} // Updated to 'styles.input'
+        />
       </div>
-      <div style={styles.searchIconView}>
-        <FastImage
+      <div style={styles.searchIconView} onClick={onPress}>
+        <img
           src={Images.searchIcon}
           alt="search-icon"
           style={styles.searchIcon}
@@ -23,7 +29,9 @@ const SearchBarField = ({ title = '', onPress }) => {
 
 SearchBarField.propTypes = {
   title: PropTypes.string,
-  onPress: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onPress: PropTypes.func,
 };
 
 export default SearchBarField;

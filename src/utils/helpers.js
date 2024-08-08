@@ -16,6 +16,11 @@ const font_size = size => {
   return Math.round(newSize) - (window.navigator.userAgent.includes('Mobile') ? 2 : 0);
 };
 
+const bytesToMb = (bytes) => {
+  // 1 MB = 1024 * 1024 bytes
+  return bytes/1000000;
+}
+
 const lineHeight = fontSize => {
   const multiplier = fontSize > 20 ? 1.5 : 1;
   return parseInt(fontSize + fontSize * multiplier, 10);
@@ -196,5 +201,6 @@ export {
   formatString,
   snackBar,
   removeItemValue,
-  convertTimeFormat
+  convertTimeFormat,
+  bytesToMb
 };

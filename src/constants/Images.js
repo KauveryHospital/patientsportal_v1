@@ -89,8 +89,16 @@ const video_call_unselected = require('../assets/images/video_call_unselected@2x
 const searchNotFound = require('../assets/images/search_not_found@2x.png');
 const errorSmall = require('../assets/icons/errorSmall@2x.png');
 
+const eventCalander= require('../assets/images/event_calander.png');
+// const healthRecord = require('../assets/images/healthRecord@1x.png');
+const qr=require('../assets/images/qr.png');
+// const notification = require('../assets/icons/notification.png')
+const family_front= require('../assets/images/chyawa@2x.png');
 
 export default {
+  eventCalander,
+  qr,
+  family_front,
   indianFlag,
   kauveryLogo,
   introSliderImage2,
