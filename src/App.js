@@ -38,13 +38,13 @@ import Tickets from './components/Tickets';
 
 const App = () => {
   return (
-    <Router basename="/home">
+    <Router basename="/">
       <div className="app">
         <Switch>
-          <Route exact path="/" component={Login} />
+          {/* <Route exact path="/" component={Login} /> */}
           <Route path="/otp" component={Otp} />
           <Route path="/signup" component={Signup} />
-          <Route path="/home" component={Home} />
+          <Route path="/" component={Home} />
           <Route path="/consult" component={Consult} />
           <Route path="/dlist" component={DoctorsList} />
           <Route path="/ddetail" component={DoctorDetail} />
