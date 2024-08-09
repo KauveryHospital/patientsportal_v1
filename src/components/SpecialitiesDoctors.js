@@ -60,14 +60,14 @@ const SpecialtiesDoctor = () => {
   };
 
   // Function to fetch location data using the token
-  const fetchLocations = async (token) => {
+  const fetchLocations = async () => {
 
     try {
       // const tokenUrl = 'http://192.168.28.86/KAPP_INFOSHARE/api/Values/GetUnit';
       const tokenUrl = 'http://localhost:1801/api/unit';
       const locationResponse = await axios.get(tokenUrl, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          // 'Authorization': `Bearer ${token}`
         }
       });
 
@@ -107,14 +107,14 @@ const SpecialtiesDoctor = () => {
 
   useEffect(() => {
     const initializeData = async () => {
-      const fetchedToken = await fetchToken();
+      // const fetchedToken = await fetchToken();
       // console.log('ksjhfoiudaogrequoIoj',fetchedToken);
-      setToken('ksdjfhwuetgsoe', fetchedToken);
-      if (fetchedToken) {
-        fetchLocations(fetchedToken);
+      // setToken('ksdjfhwuetgsoe', fetchedToken);
+      // if (fetchedToken) {
+        fetchLocations();
         sendSelectedUnitToAPI(selectedUnit);
         fetchDoctors(selectedUnit, spID);
-      }
+      // }
     };
 
     initializeData();
