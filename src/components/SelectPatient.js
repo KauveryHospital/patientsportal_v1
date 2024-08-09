@@ -494,18 +494,6 @@ const SelectPatient = () => {
     slot_id: "1687304",
     unit_id: "13097000000024",
     files: ''
-    // [
-        // {
-        //     file_id: "96750e7e-4428-4b69-b0aa-3dcaffc08061",
-        //     file_name: "BIO-DATA",
-        //     file_url: "https://kauverykaredev.s3.amazonaws.com/user_files/user_files/2023-11-03T095535_BIO-DATA.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA46KNISGSXYVR7MU7%2F20231103%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20231103T095536Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=1578f27531744046d6d6ea1c963805cf26167feae07b54a8d5939cb7ec3208e3"
-        // },
-        // {
-        //     file_id: "96750e7e-4428-4b69-b0aa-3dcaffc08061",
-        //   file_name: "BIO-DATA",
-        //     file_url: "https://kauverykaredev.s3.amazonaws.com/user_files/user_files/2023-11-03T095535_BIO-DATA.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA46KNISGSXYVR7MU7%2F20231103%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20231103T095536Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=1578f27531744046d6d6ea1c963805cf26167feae07b54a8d5939cb7ec3208e3"
-        // }
-    // ]
     };
     // console.log('bodyyyyyy', body);
     try {
